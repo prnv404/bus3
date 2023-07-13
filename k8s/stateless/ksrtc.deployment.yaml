@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ksrtc-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ksrtc
+  template:
+    metadata:
+      labels:
+        app: ksrtc
+    spec:
+      containers:
+        - name: ksrtc
+          image: prnv404/ksrtc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ksrtc-srv
+spec:
+  selector:
+    app: ksrtc
+  ports:
+    - name: ksrtc
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
