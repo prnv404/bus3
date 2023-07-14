@@ -1,22 +1,19 @@
 import mongoose, { Schema } from 'mongoose';
 
 
-
-interface DepotAttrs {
+export interface DepotAttrs {
     
     name: string
     
-    depoCode: string
+    depotCode: string
     
     district: string
 
-    admin: string[]
-
-    employee: string[]
+    employee?: string[]
     
-    buses: string[]
+    buses?: string[]
     
-    routes: string[]
+    routes?: string[]
     
 
 }
@@ -33,11 +30,15 @@ interface DepotDoc extends mongoose.Document {
 
     name: string
     
-    state: string
+    depotCode: string
     
-    depots: string[]
+    district: string
 
-    password: string
+    employee: string[]
+    
+    buses: string[]
+    
+    routes: string[]
 
 
 }
@@ -51,20 +52,38 @@ const DepotSchema = new mongoose.Schema({
 
     },
 
-    depoCode: {
+    depotCode: {
 
         type: String,
         require:true
 
     },
 
-    admins: [{ type: Schema.Types.ObjectId, ref: "Admin" }],
+    district: {
+        type: String,
+        required:true
+    },
+
+
+
+    lat: String,
+
+    lng:String,
 
     employees: [{ type: Schema.Types.ObjectId, ref: "Employee" }],
 
     routes: [{ id: String }],
     
-});
+},{
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+      }
+    }
+  });
     
 
 

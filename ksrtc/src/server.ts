@@ -1,9 +1,14 @@
+import 'dotenv/config'
 import app from './app'
+import { connectToMongoDB} from '@prnv404/bus3'
 
-(async function start() {
+(async ()=> {
     
 
     try {
+
+
+        await connectToMongoDB('mongodb://mongo-srv:27017/ksrtc')
 
         app.listen(3000, () => {
 

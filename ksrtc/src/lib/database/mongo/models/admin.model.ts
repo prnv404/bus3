@@ -2,15 +2,17 @@ import mongoose from 'mongoose';
 import { Password } from '@prnv404/bus3'
 
 
-interface AdminAttrs {
+export interface AdminAttrs {
 
     name: string
 
     role: string
     
-    email: string;
+    phone: number;
 
     password: string;
+    
+    otp?:number
     
 }
 
@@ -24,9 +26,17 @@ interface AdminModel extends mongoose.Model<AdminDoc> {
 
 interface AdminDoc extends mongoose.Document {
 
-    email: string;
+    phone: number;
     
     password: string;
+
+    role: string
+    
+    name: string
+    
+    isVerified: boolean
+    
+    otp:number
     
   
 }
@@ -42,7 +52,15 @@ const AdminSchema = new mongoose.Schema({
         
     },
 
-    email: {
+    phone: {
+
+        type: Number,
+
+        required: true
+        
+    },
+
+    role: {
 
         type: String,
 
@@ -56,11 +74,33 @@ const AdminSchema = new mongoose.Schema({
 
         required: true
         
+    },
+
+    isVerified: {
+
+        type: Boolean,
+
+        default: false
+        
+    },
+
+    otp: {
+        type: Number,
+        required:true
     }
 
 
 
-});
+},{
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+      }
+    }
+  });
 
 AdminSchema.pre('save', async function (done) {
     

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 
-interface EmployeeAttrs {
+export interface EmployeeAttrs {
 
     name: string
 
@@ -14,14 +14,14 @@ interface EmployeeAttrs {
 }
 
 
-interface EmployeeModel extends mongoose.Model<UserDoc> {
+interface EmployeeModel extends mongoose.Model<EmployeeDoc> {
 
-    build(attrs: EmployeeAttrs): UserDoc;
+    build(attrs: EmployeeAttrs): EmployeeDoc;
     
 }
 
 
-interface UserDoc extends mongoose.Document {
+interface EmployeeDoc extends mongoose.Document {
 
     name: string
 
@@ -80,6 +80,6 @@ EmployeeSchema.statics.build = (attrs: EmployeeAttrs) => {
     
 };
 
-const Employee = mongoose.model<UserDoc, EmployeeModel>('Employee', EmployeeSchema);
+const Employee = mongoose.model<EmployeeDoc, EmployeeModel>('Employee', EmployeeSchema);
 
 export { Employee };
