@@ -12,7 +12,7 @@ import { connectToMongoDB} from '@prnv404/bus3'
 
         app.listen(3000, () => {
 
-            console.log("App is Listening on port 3000")
+            console.log("Server is Listening on port 3000")
 
         })
 

@@ -20,6 +20,13 @@ export class EmployeeRepository {
 
     }
 
+    async findEmployee(phone: number) {
+
+        const user = await Employee.findOne({ phone })
+        
+        return user
+        
+    }
 
     async getAllEmployees(depotCode:string) {
         

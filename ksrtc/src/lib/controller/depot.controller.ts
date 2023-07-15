@@ -8,20 +8,16 @@ const router = express()
 
 const Service = new DepotService(new DepotRepository())
 
-
 router.post("/",currentUser,requireAuth, async (req: Request, res: Response) => {
-        
 
     const { depotCode, district, name } = req.body 
     
-        
     const depot = await Service.createDepots({ depotCode, district, name })
-    
+
+    // Add the Depot to elastic search 
 
     res.status(201).json({ depot })
     
-
-
 })
     
 router.get('/all',currentUser,requireAuth, async (req: Request, res: Response) => {
@@ -50,6 +46,8 @@ router.patch('/edit/:id',currentUser,requireAuth, async (req: Request, res: Resp
     const { name,district,depotCode} = req.body
 
     const Depot = await Service.EditDepot(id, { name, district, depotCode })
+
+    // Update in elastci search as well
     
     res.send(Depot)
 
@@ -60,7 +58,9 @@ router.delete('/delete/:id',currentUser,requireAuth, async (req: Request, res: R
         
     const id = req.params.id
 
-    const Depot = await Service.DeleteDepot(id)
+    await Service.DeleteDepot(id)
+    
+    // Delete in Elastic Search as well
     
     res.send({ message:"Depot Deleted Successfully"})
 

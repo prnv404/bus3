@@ -9,7 +9,7 @@ export interface DepotAttrs {
     
     district: string
 
-    employee?: string[]
+    employees?: string[]
     
     buses?: string[]
     
@@ -34,7 +34,7 @@ interface DepotDoc extends mongoose.Document {
     
     district: string
 
-    employee: string[]
+    employees: string[]
     
     buses: string[]
     
@@ -70,7 +70,11 @@ const DepotSchema = new mongoose.Schema({
 
     lng:String,
 
-    employees: [{ type: Schema.Types.ObjectId, ref: "Employee" }],
+  employees: [{ type: Schema.Types.ObjectId, ref: "Employee" }],
+  
+    
+  buses: [{ type: Schema.Types.ObjectId, ref: "Bus" }],
+
 
     routes: [{ id: String }],
     

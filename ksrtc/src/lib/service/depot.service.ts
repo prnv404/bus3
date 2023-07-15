@@ -9,10 +9,9 @@ export class DepotService {
     
     async createDepots(data: DepotAttrs) {
 
-
         const depotName = await this.depotRepository.findDepotByName(data.name)
 
-        const depotCode = await this.depotRepository.findDepotByDepotCode(data.depotCode) 
+        const depotCode = await this.depotRepository.findByDepotCode(data.depotCode) 
 
         if (depotName || depotCode) throw new BadRequestError("Depot Already Exist");
 

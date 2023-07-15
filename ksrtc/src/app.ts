@@ -6,6 +6,11 @@ import cookieSession from "cookie-session";
 import { errorHandler, NotFoundError } from '@prnv404/bus3'
 import {DepotRouter } from './lib/controller/depot.controller'
 import {AdminRouter } from './lib/controller/admin.controller'
+import { EmployeeRouter } from './lib/controller/employee.controller';
+import { BusRouter } from './lib/controller/bus.controller';
+
+
+
 const app = express()
 
 
@@ -16,23 +21,17 @@ app.use(express.json())
 app.use(cookieSession({ signed: false, secure: false, }));
 
 
-
 app.use('/api/ksrtc/depot', DepotRouter)
 
 app.use('/api/ksrtc/admin',AdminRouter)
 
-// app.use('/ksrtc/employee',)/
+app.use('/api/ksrtc/employee', EmployeeRouter)
+
+app.use('/api/ksrtc/bus',BusRouter)
 
 
-app.all("*", async (req:Request, res:Response) => {
-    
-    throw new NotFoundError();
-
-});
-  
 
 
-app.use(errorHandler)
   
 
 export default app

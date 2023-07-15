@@ -32,7 +32,7 @@ export class DepotRepository {
 
     }
 
-    async findDepotByDepotCode(DepotCode:string) {
+    async findByDepotCode(DepotCode:string) {
 
         const DepotExist = await Depot.findOne({ depotCode:DepotCode })
 
