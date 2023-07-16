@@ -1,45 +1,26 @@
 import { Admin, AdminAttrs } from "../models/admin.model";
 
-
 export class AdminRepository {
+	async create(data: AdminAttrs) {
+		const doc = await Admin.build(data).save();
 
+		return doc;
+	}
 
-    async create(data:AdminAttrs) {
+	async findById(id: string) {
+		const doc = await Admin.findById(id);
+		return doc;
+	}
 
-        const doc = await Admin.build(data).save()
-        
-        return doc
+	async findByPhone(phone: number) {
+		const doc = await Admin.findOne({ phone });
 
-    }
+		return doc;
+	}
 
+	async deletebyId(id: string) {
+		const doc = await Admin.findByIdAndRemove(id);
 
-    async findById(id:string) {
-
-        const doc =  await Admin.findById(id)
-        return doc
-
-    }
-
-
-    async findByPhone(phone:number) {
-
-        const doc = await Admin.findOne({ phone })
-        
-        return doc
-
-    }
-
-
-    async deletebyId(id: string) {
-        
-        const doc = await Admin.findByIdAndRemove(id)
-
-        return doc
-
-    }
-
-    
-
-    
-
+		return doc;
+	}
 }

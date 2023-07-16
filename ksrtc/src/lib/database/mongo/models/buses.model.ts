@@ -1,85 +1,59 @@
-import mongoose from 'mongoose';
-
+import mongoose from "mongoose";
 
 export interface BusAttrs {
+	BusNo: string;
 
-    BusNo: string
+	type: string;
 
-    type: string
-    
-    depotCode: string
-    
-    seats : number
-    
+	depotCode: string;
+
+	seats: number;
 }
-
 
 interface BusModel extends mongoose.Model<BusDoc> {
-
-    build(attrs: BusAttrs): BusDoc;
-    
+	build(attrs: BusAttrs): BusDoc;
 }
 
-
 interface BusDoc extends mongoose.Document {
+	BusNo: string;
 
-    BusNo: string
+	type: string;
 
-    type: string
-    
-    depotCode: string
-    
-    seats : number
-    
-  
+	depotCode: string;
+
+	seats: number;
 }
 
 const BusSchema = new mongoose.Schema({
+	BusNo: {
+		type: String,
 
+		required: true
+	},
 
-    BusNo: {
+	type: {
+		type: String,
 
-        type: String,
+		required: true
+	},
 
-        required: true
-        
-    },
+	depotCode: {
+		type: String,
 
-    type: {
+		required: true
+	},
 
-        type: String,
+	seats: {
+		type: Number,
 
-        required: true
-        
-    },
-
-    depotCode: {
-
-        type: String,
-
-        required: true
-        
-    },
-
-    seats: {
-        
-        type: Number,
-
-        required:true
-    }
-
-
-
+		required: true
+	}
 });
 
-
-
 BusSchema.statics.build = (attrs: BusAttrs) => {
-
-    return new Bus(attrs);
-    
+	return new Bus(attrs);
 };
 
-const Bus = mongoose.model<BusDoc, BusModel>('Bus', BusSchema);
+const Bus = mongoose.model<BusDoc, BusModel>("Bus", BusSchema);
 
 export { Bus };

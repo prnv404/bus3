@@ -1,127 +1,99 @@
-import mongoose from 'mongoose';
-import { Password } from '@prnv404/bus3'
-
+import mongoose from "mongoose";
+import { Password } from "@prnv404/bus3";
 
 export interface AdminAttrs {
+      name: string;
 
-    name: string
+      role: string;
 
-    role: string
-    
-    phone: number;
+      phone: number;
 
-    password: string;
-    
-    otp?:number
-    
+      password: string;
+
+      otp?: number;
 }
-
 
 interface AdminModel extends mongoose.Model<AdminDoc> {
-
-    build(attrs: AdminAttrs): AdminDoc;
-    
+      build(attrs: AdminAttrs): AdminDoc;
 }
-
 
 interface AdminDoc extends mongoose.Document {
+      phone: number;
 
-    phone: number;
-    
-    password: string;
+      password: string;
 
-    role: string
-    
-    name: string
-    
-    isVerified: boolean
-    
-    otp:number
-    
-  
+      role: string;
+
+      name: string;
+
+      isVerified: boolean;
+
+      otp: number;
 }
 
-const AdminSchema = new mongoose.Schema({
+const AdminSchema = new mongoose.Schema(
+      {
+            name: {
+                  type: String,
 
+                  required: true,
+            },
 
-    name: {
+            phone: {
+                  type: Number,
 
-        type: String,
+                  required: true,
+            },
 
-        required: true
-        
-    },
+            role: {
+                  type: String,
 
-    phone: {
+                  required: true,
+            },
 
-        type: Number,
+            password: {
+                  type: String,
 
-        required: true
-        
-    },
+                  required: true,
+            },
 
-    role: {
+            isVerified: {
+                  type: Boolean,
 
-        type: String,
+                  default: false,
+            },
 
-        required: true
-        
-    },
+            otp: {
+                  type: Number,
+                  required: true,
+            },
+      },
+      {
+            toJSON: {
+                  transform(doc, ret) {
+                        ret.id = ret._id;
+                        delete ret._id;
+                        delete ret.password;
+                        delete ret.__v;
+                  },
+            },
+      },
+);
 
-    password: {
+AdminSchema.pre("save", async function (done) {
+      if (this.isModified("password")) {
+            const hashed = await Password.toHash(this.get("password"));
 
-        type: String,
-
-        required: true
-        
-    },
-
-    isVerified: {
-
-        type: Boolean,
-
-        default: false
-        
-    },
-
-    otp: {
-        type: Number,
-        required:true
-    }
-
-
-
-},{
-    toJSON: {
-      transform(doc, ret) {
-        ret.id = ret._id;
-        delete ret._id;
-        delete ret.password;
-        delete ret.__v;
+            this.set("password", hashed);
       }
-    }
-  });
 
-AdminSchema.pre('save', async function (done) {
-    
-    if (this.isModified('password')) {
-      
-        const hashed = await Password.toHash(this.get('password'));
-        
-        this.set('password', hashed);
-        
-    }
-    
-    done();
-    
+      done();
 });
 
 AdminSchema.statics.build = (attrs: AdminAttrs) => {
-
-    return new Admin(attrs);
-    
+      return new Admin(attrs);
 };
 
-const Admin = mongoose.model<AdminDoc, AdminModel>('Admin', AdminSchema);
+const Admin = mongoose.model<AdminDoc, AdminModel>("Admin", AdminSchema);
 
 export { Admin };

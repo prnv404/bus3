@@ -1,103 +1,78 @@
-import mongoose, { Schema } from 'mongoose';
-
+import mongoose, { Schema } from "mongoose";
 
 export interface DepotAttrs {
-    
-    name: string
-    
-    depotCode: string
-    
-    district: string
+	name: string;
 
-    employees?: string[]
-    
-    buses?: string[]
-    
-    routes?: string[]
-    
+	depotCode: string;
 
+	district: string;
+
+	employees?: string[];
+
+	buses?: string[];
+
+	routes?: string[];
 }
-
 
 interface DepotModel extends mongoose.Model<DepotDoc> {
-
-    build(attrs: DepotAttrs): DepotDoc;
-    
+	build(attrs: DepotAttrs): DepotDoc;
 }
-
 
 interface DepotDoc extends mongoose.Document {
+	name: string;
 
-    name: string
-    
-    depotCode: string
-    
-    district: string
+	depotCode: string;
 
-    employees: string[]
-    
-    buses: string[]
-    
-    routes: string[]
+	district: string;
 
+	employees: string[];
 
+	buses: string[];
+
+	routes: string[];
 }
 
-const DepotSchema = new mongoose.Schema({
+const DepotSchema = new mongoose.Schema(
+	{
+		name: {
+			type: String,
+			require: true
+		},
 
-    name: {
+		depotCode: {
+			type: String,
+			require: true
+		},
 
-        type: String,
-        require:true
+		district: {
+			type: String,
+			required: true
+		},
 
-    },
+		lat: String,
 
-    depotCode: {
+		lng: String,
 
-        type: String,
-        require:true
+		employees: [{ type: Schema.Types.ObjectId, ref: "Employee" }],
 
-    },
+		buses: [{ type: Schema.Types.ObjectId, ref: "Bus" }],
 
-    district: {
-        type: String,
-        required:true
-    },
-
-
-
-    lat: String,
-
-    lng:String,
-
-  employees: [{ type: Schema.Types.ObjectId, ref: "Employee" }],
-  
-    
-  buses: [{ type: Schema.Types.ObjectId, ref: "Bus" }],
-
-
-    routes: [{ id: String }],
-    
-},{
-    toJSON: {
-      transform(doc, ret) {
-        ret.id = ret._id;
-        delete ret._id;
-        delete ret.password;
-        delete ret.__v;
-      }
-    }
-  });
-    
-
-
-
+		routes: [{ id: String }]
+	},
+	{
+		toJSON: {
+			transform(doc, ret) {
+				ret.id = ret._id;
+				delete ret._id;
+				delete ret.password;
+				delete ret.__v;
+			}
+		}
+	}
+);
 
 DepotSchema.statics.build = (attrs: DepotAttrs) => {
+	return new Depot(attrs);
+};
 
-  return new Depot(attrs);
-  
-}; 
-
-export const Depot = mongoose.model<DepotDoc, DepotModel>('DEPOT', DepotSchema);
-
+export const Depot = mongoose.model<DepotDoc, DepotModel>("DEPOT", DepotSchema);

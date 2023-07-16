@@ -1,16 +1,5 @@
-import { KafkaPublisher, TOPIC } from "@prnv404/bus3";
+import { KafkaPublisher, TOPIC, OTPEvent } from "@prnv404/bus3";
 
-
-interface OTPEvent {
-    topic: TOPIC.OTP,
-    data: {
-        phone: number,
-        otp: string,
-        message:string
-    }
-}
-export class SENDOTPNOTIFICATION extends KafkaPublisher<OTPEvent >{
-
-    topic: TOPIC.OTP = TOPIC.OTP
-
+export class SENDOTPNOTIFICATION extends KafkaPublisher<OTPEvent> {
+      topic: TOPIC.OTP = TOPIC.OTP;
 }

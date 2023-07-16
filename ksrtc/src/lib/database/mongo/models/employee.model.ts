@@ -1,85 +1,59 @@
-import mongoose from 'mongoose';
-
+import mongoose from "mongoose";
 
 export interface EmployeeAttrs {
+	name: string;
 
-    name: string
+	type: string;
 
-    type: string
-    
-    depotCode: string
-    
-    phone : number
-    
+	depotCode: string;
+
+	phone: number;
 }
-
 
 interface EmployeeModel extends mongoose.Model<EmployeeDoc> {
-
-    build(attrs: EmployeeAttrs): EmployeeDoc;
-    
+	build(attrs: EmployeeAttrs): EmployeeDoc;
 }
 
-
 interface EmployeeDoc extends mongoose.Document {
+	name: string;
 
-    name: string
+	type: string;
 
-    type: string
-    
-    depotCode: string
-    
-    phone : number
-    
-  
+	depotCode: string;
+
+	phone: number;
 }
 
 const EmployeeSchema = new mongoose.Schema({
+	name: {
+		type: String,
 
+		required: true
+	},
 
-    name: {
+	type: {
+		type: String,
 
-        type: String,
+		required: true
+	},
 
-        required: true
-        
-    },
+	depotCode: {
+		type: String,
 
-    type: {
+		required: true
+	},
 
-        type: String,
+	phone: {
+		type: Number,
 
-        required: true
-        
-    },
-
-    depotCode: {
-
-        type: String,
-
-        required: true
-        
-    },
-
-    phone: {
-        
-        type: Number,
-
-        required:true
-    }
-
-
-
+		required: true
+	}
 });
 
-
-
 EmployeeSchema.statics.build = (attrs: EmployeeAttrs) => {
-
-    return new Employee(attrs);
-    
+	return new Employee(attrs);
 };
 
-const Employee = mongoose.model<EmployeeDoc, EmployeeModel>('Employee', EmployeeSchema);
+const Employee = mongoose.model<EmployeeDoc, EmployeeModel>("Employee", EmployeeSchema);
 
 export { Employee };

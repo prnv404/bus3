@@ -29,7 +29,6 @@ router.post("/", currentUser, requireAuth, async (req:Request,res:Response) => {
 
 router.get("/all", currentUser, requireAuth, async (req:Request,res:Response) => {
 
-    console.log("HELLO")
 
     const depotCode = req.query.depotCode as string
 
