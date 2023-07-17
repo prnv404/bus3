@@ -1,16 +1,30 @@
-name: tests-state-operators
+name: Continuous Integration
 
 on:
   push:
     branches:
       - master
       - dev
-    paths:
-      - 'state-operators/**'
+  pull_request:
+    branches:
+      - master
+      - dev
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - run: cd 'state-operators && npm install && npm run test:ci
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: cd state-operators && npm install
+
+      - name: Run tests
+        run: npm run test:ci
