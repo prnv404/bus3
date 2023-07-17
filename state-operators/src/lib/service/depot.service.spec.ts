@@ -39,21 +39,6 @@ describe("DepotService", () => {
 			expect(result).toEqual(data);
 		});
 
-		// it("should throw BadRequestError if depot with the same name already exists", async () => {
-		// 	// Arrange
-		// 	const data = {
-		// 		name: "Depot 1",
-		// 		depotCode: "ABC123",
-		// 		district: "District 1",
-		// 		Operator: "Operator 1"
-		// 	};
-		// 	depotRepository.findDepotByName = jest.fn().mockResolvedValue(data);
-
-		// 	// Act and Assert
-		// 	await expect(depotService.createDepots(data)).rejects.toThrowError(BadRequestError);
-		// 	expect(depotRepository.findDepotByName).toHaveBeenCalledWith(data.name);
-		// });
-
 		it("should throw BadRequestError if depot with the same depotCode already exists", async () => {
 			// Arrange
 			const data: DepotAttrs = {
