@@ -3,6 +3,7 @@ import "dotenv/config";
 
 import express, { Request, Response } from "express";
 import cookieSession from "cookie-session";
+import morgan from "morgan";
 import { errorHandler, NotFoundError } from "@prnv404/bus3";
 import { DepotRouter } from "./lib/controller/depot.controller";
 import { AdminRouter } from "./lib/controller/admin.controller";
@@ -17,6 +18,8 @@ app.set("trust proxy", true);
 app.use(express.json());
 
 app.use(cookieSession({ signed: false, secure: false }));
+
+app.use(morgan("dev"));
 
 app.use("/api/srt/depot", DepotRouter);
 

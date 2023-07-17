@@ -36,47 +36,58 @@ interface ScheduleDoc extends mongoose.Document {
 	depotCode: string;
 }
 
-const ScheduleSchema = new mongoose.Schema({
-	name: {
-		type: String,
+const ScheduleSchema = new mongoose.Schema(
+	{
+		name: {
+			type: String,
 
-		required: true
+			required: true
+		},
+
+		BusNo: {
+			type: String,
+
+			required: true
+		},
+
+		Operator: {
+			type: String,
+			enum: ["KSRTC", "TNRTC", "MSTC", "BMTC"],
+			require: true
+		},
+
+		depotCode: {
+			type: String,
+
+			required: true
+		},
+
+		start: {
+			type: String,
+
+			required: true
+		},
+		stop: {
+			type: String,
+
+			required: true
+		},
+		route: {
+			type: String,
+
+			required: true
+		}
 	},
-
-	BusNo: {
-		type: String,
-
-		required: true
-	},
-
-	Operator: {
-		type: String,
-		enum: ["KSRTC", "TNRTC", "MSTC", "BMTC"],
-		require: true
-	},
-
-	depotCode: {
-		type: String,
-
-		required: true
-	},
-
-	start: {
-		type: String,
-
-		required: true
-	},
-	stop: {
-		type: String,
-
-		required: true
-	},
-	route: {
-		type: String,
-
-		required: true
+	{
+		toJSON: {
+			transform(doc, ret) {
+				ret.id = ret._id;
+				delete ret._id;
+				delete ret.__v;
+			}
+		}
 	}
-});
+);
 
 ScheduleSchema.statics.build = (attrs: ScheduleAttrs) => {
 	return new Schedule(attrs);

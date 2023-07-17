@@ -4,79 +4,63 @@ import { EmployeeRepository } from "../database/mongo/repository/employee.reposi
 import { IEmployee } from "../controller/employee.controller";
 import { DepotRepository } from "../database/mongo/repository/depot.repository";
 
-
 export class EmployeeService {
+	constructor(
+		private readonly employeeRepository: EmployeeRepository,
+		private readonly depotRepository: DepotRepository
+	) {}
 
-    constructor(private readonly employeeRepository: EmployeeRepository,private readonly depotRepository:DepotRepository) { }
-    
+	async createEmployee(data: EmployeeAttrs) {
+		const EmployeeExist = await this.employeeRepository.findEmployee(data.phone);
 
-    async createEmployee(data:EmployeeAttrs) {
-        
+		if (EmployeeExist) throw new BadRequestError("Employee Already Exist");
 
-        const EmployeeExist = await this.employeeRepository.findEmployee(data.phone)
+		const doc = await this.employeeRepository.createEmployee(data);
 
-        if (EmployeeExist) throw new BadRequestError("Employee Already Exist")
-           
-        const doc = await this.employeeRepository.createEmployee(data)
+		const depot = await this.depotRepository.findByDepotCode(data.depotCode);
 
-        const depot = await this.depotRepository.findByDepotCode(data.depotCode)
+		depot?.employees.push(doc.id);
 
+		await depot?.save();
 
-        depot?.employees.push(doc.id)
+		return doc;
+	}
 
-        await depot?.save()
+	async getEmploye(id: string) {
+		const user = await this.employeeRepository.getEmployeeById(id);
 
-        return doc
-    }
+		if (!user) throw new BadRequestError("User Not found");
 
-    async getEmploye(id:string) {
+		return user;
+	}
 
-        const user = await this.employeeRepository.getEmployeeById(id)
-        
-        if (!user) throw new BadRequestError("User Not found")
-        
-        return user
+	async getAllEmployees(depot: string) {
+		return await this.employeeRepository.getAllEmployees(depot);
+	}
 
-    }
+	async EditEmployee(data: EmployeeAttrs, id: string) {
+		const user = await this.employeeRepository.getEmployeeById(id);
 
-    async getAllEmployees(depot:string) {
+		if (!user) throw new BadRequestError("No Employee Found");
 
-        return await this.employeeRepository.getAllEmployees(depot)
+		user.name = data.name || user.name;
 
-    }
+		user.phone = data.phone || user.phone;
 
-    async EditEmployee(data: IEmployee, id:string) {
+		user.type = data.type || user.type;
 
-        const user = await this.employeeRepository.getEmployeeById(id)
+		user.depotCode = data.depotCode || user.depotCode;
 
-        if (!user) throw new BadRequestError("No Employee Found")
-        
-        user.name = data.name || user.name
+		await user.save();
 
-        user.phone = data.phone || user.phone
+		return user;
+	}
 
-        user.type = data.type || user.type
+	async DeleteEmployee(id: string) {
+		const user = await this.employeeRepository.deleteEmployee(id);
 
-        user.depotCode = data.depotCode || user.depotCode
+		if (!user) throw new BadRequestError("No user Found ");
 
-        await user.save()
-
-        return user
-
-    }
-
-
-    async DeleteEmployee(id:string) {
-
-        const user = await this.employeeRepository.deleteEmployee(id)
-        
-        if (!user) throw new BadRequestError("No user Found ")
-        
-        return user
-        
-
-    }
-
-
-
+		return user;
+	}
 }

@@ -1,24 +1,23 @@
-import { currentUser, requireAuth } from "@prnv404/bus3";
+import { ELASTIC_INDEX, currentUser, requireAuth, validateRequest } from "@prnv404/bus3";
 import express, { Request, Response } from "express";
 import { ScheduleAttrs } from "../database/mongo/models/schedule.model";
 import { ScheduleService } from "../service/schedule.service";
 import { ScheduleRepsitory } from "../database/mongo/repository/schedule.repository";
 import { ElasticSearchRepository } from "../database/elasticsearch/repository/elasticsearch.repository";
+import { createScheduleValidation } from "./validator/validator";
 
 const router = express();
 
 const Service = new ScheduleService(new ScheduleRepsitory());
 const ElasticService = new ElasticSearchRepository();
 
-router.post("/", currentUser, requireAuth, async (req: Request, res: Response) => {
+router.post("/", createScheduleValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
 	const data = req.body as ScheduleAttrs;
 
 	const schedule = await Service.Create(data);
 
 	// Create Schedule in Elastic Search
-	console.log(schedule);
-	await ElasticService.PushToElasticSearch(schedule.id, "schedule", schedule);
-	// Upend IN Redis
+	await ElasticService.AddDoc(schedule.id, ELASTIC_INDEX.SCHEDULE, schedule);
 
 	res.status(201).json(schedule);
 });
@@ -45,7 +44,7 @@ router.patch("/edit/:id", currentUser, requireAuth, async (req: Request, res: Re
 
 	const schedule = await Service.EditSchedule(id, data);
 
-	await ElasticService.UpdateDoc(schedule.id, "schedule", schedule);
+	await ElasticService.UpdateDoc(schedule.id, ELASTIC_INDEX.SCHEDULE, schedule);
 
 	res.status(200).json(schedule);
 });
@@ -54,6 +53,8 @@ router.delete("/delete/:id", currentUser, requireAuth, async (req: Request, res:
 	const id = req.params.id;
 
 	await Service.DeleteSchedule(id);
+
+	await ElasticService.DeleteDoc(id, ELASTIC_INDEX.SCHEDULE);
 
 	res.status(200).json({ message: "Schedule Deleted SuccessFully" });
 });

@@ -2,9 +2,10 @@ import express, { Request, Response } from "express";
 import { AdminService } from "../service/admin.service";
 import { AdminRepository } from "../database/mongo/repository/admin.repository";
 import jwt from "jsonwebtoken";
-import { currentUser } from "@prnv404/bus3";
+import { currentUser, validateRequest } from "@prnv404/bus3";
 import { SENDOTPNOTIFICATION } from "../../events/publisher/otp.publisher";
 import { kafka_client } from "../../config/kafka.config";
+import { signinValidation, signupValidation, verifyOtpValidation } from "./validator/validator";
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ interface AdminInterface {
 	Operator: string;
 }
 
-router.post("/signup", async (req: Request, res: Response) => {
+router.post("/signup", signupValidation, validateRequest, async (req: Request, res: Response) => {
 	const { name, password, phone, role, Operator } = req.body as AdminInterface;
 
 	const otp = Math.floor(1000 + Math.random() * 9000);
@@ -34,10 +35,10 @@ router.post("/signup", async (req: Request, res: Response) => {
 		message: "YOUR ONE TIME VEIFIFCATION CODE IS "
 	});
 
-	res.status(201).send({ message: "OTP Sended To Your PhoneNumber " });
+	res.status(201).send({ message: "OTP Sended To Your PhoneNumber " + phone });
 });
 
-router.post("/signin", async (req: Request, res: Response) => {
+router.post("/signin", signinValidation, validateRequest, async (req: Request, res: Response) => {
 	const { password, phone } = req.body as AdminInterface;
 
 	const user = await Service.signin(phone, password);
@@ -57,7 +58,7 @@ router.delete("/signout", async (req: Request, res: Response) => {
 	res.status(200).send({ message: "SignOut  SuccessFully" });
 });
 
-router.post("/verify-otp", async (req: Request, res: Response) => {
+router.post("/verify-otp", verifyOtpValidation, validateRequest, async (req: Request, res: Response) => {
 	const { otp, phone } = req.body;
 
 	const user = await Service.VerifyOtp(otp, phone);

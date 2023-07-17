@@ -1,21 +1,23 @@
 import express, { Request, Response, Router } from "express";
 import { DepotRepository } from "../database/mongo/repository/depot.repository";
 import { DepotService } from "../service/depot.service";
-import { currentUser, requireAuth } from "@prnv404/bus3";
+import { ELASTIC_INDEX, currentUser, requireAuth, validateRequest } from "@prnv404/bus3";
 import { DepotAttrs } from "../database/mongo/models/depot.model";
 import { ElasticSearchRepository } from "../database/elasticsearch/repository/elasticsearch.repository";
+import { createDepotValidation } from "./validator/validator";
 
 const router = express();
 
 const Service = new DepotService(new DepotRepository());
 const ElasticService = new ElasticSearchRepository();
 
-router.post("/", currentUser, requireAuth, async (req: Request, res: Response) => {
+router.post("/", createDepotValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
 	const { depotCode, district, name, Operator } = req.body as DepotAttrs;
 
 	const depot = await Service.createDepots({ depotCode, district, name, Operator });
 
 	// Add the Depot to elastic search
+	await ElasticService.AddDoc(depot.id, ELASTIC_INDEX.DEPOT, depot);
 
 	res.status(201).json({ depot });
 });
@@ -39,11 +41,12 @@ router.patch("/edit/:id", currentUser, requireAuth, async (req: Request, res: Re
 
 	const { name, district, depotCode, Operator } = req.body as DepotAttrs;
 
-	const Depot = await Service.EditDepot(id, { name, district, depotCode, Operator });
+	const depot = await Service.EditDepot(id, { name, district, depotCode, Operator });
 
 	// Update in elastci search as well
+	await ElasticService.UpdateDoc(depot.id, ELASTIC_INDEX.DEPOT, depot);
 
-	res.send(Depot);
+	res.send(depot);
 });
 
 router.delete("/delete/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
@@ -52,10 +55,9 @@ router.delete("/delete/:id", currentUser, requireAuth, async (req: Request, res:
 	await Service.DeleteDepot(id);
 
 	// Delete in Elastic Search as well
+	await ElasticService.DeleteDoc(id, ELASTIC_INDEX.DEPOT);
 
 	res.send({ message: "Depot Deleted Successfully" });
 });
-
-router.delete("/delete/:id", currentUser, requireAuth, async (req: Request, res: Response) => {});
 
 export { router as DepotRouter };

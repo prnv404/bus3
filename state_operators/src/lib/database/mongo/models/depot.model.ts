@@ -59,9 +59,15 @@ const DepotSchema = new mongoose.Schema(
 			required: true
 		},
 
-		lat: String,
+		lat: {
+			type: String,
+			required: true
+		},
 
-		lng: String,
+		lng: {
+			type: String,
+			required: true
+		},
 
 		employees: [{ type: Schema.Types.ObjectId, ref: "Employee" }],
 
@@ -74,7 +80,6 @@ const DepotSchema = new mongoose.Schema(
 			transform(doc, ret) {
 				ret.id = ret._id;
 				delete ret._id;
-				delete ret.password;
 				delete ret.__v;
 			}
 		}

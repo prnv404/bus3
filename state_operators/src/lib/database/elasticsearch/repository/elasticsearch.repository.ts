@@ -3,14 +3,14 @@ import { ELASTIC_CLIENT } from "../../../../config/elasticsearch.config";
 export class ElasticSearchRepository {
 	constructor() {}
 
-	async PushToElasticSearch(id: string, index: string, data: any) {
+	async AddDoc(id: string, index: string, data: any) {
 		try {
-			const res = await ELASTIC_CLIENT.index({
+			await ELASTIC_CLIENT.index({
 				index,
 				id: id.toString(),
 				body: data
 			});
-			console.log(res);
+			console.log("ADDED IN Elastic Search");
 		} catch (error) {
 			console.log(error);
 		}
@@ -25,9 +25,17 @@ export class ElasticSearchRepository {
 					doc: data
 				}
 			});
-			console.log("Edited IN Elastic Search");
+			console.log("EDITED IN Elastic Search");
 		} catch (error) {
 			console.log(error);
 		}
+	}
+
+	async DeleteDoc(id: string, index: string) {
+		await ELASTIC_CLIENT.delete({
+			index,
+			id: id.toString()
+		});
+		console.log("DELETED IN Elastic Search");
 	}
 }

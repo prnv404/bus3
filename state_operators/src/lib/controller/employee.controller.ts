@@ -1,8 +1,9 @@
-import { currentUser, requireAuth } from "@prnv404/bus3";
+import { currentUser, requireAuth, validateRequest } from "@prnv404/bus3";
 import express, { Request, Response } from "express";
 import { EmployeeService } from "../service/employee.service";
 import { EmployeeRepository } from "../database/mongo/repository/employee.repository";
 import { DepotRepository } from "../database/mongo/repository/depot.repository";
+import { createEmployeeValidation } from "./validator/validator";
 
 const router = express();
 
@@ -20,7 +21,7 @@ export interface IEmployee {
 	Operator: string;
 }
 
-router.post("/", currentUser, requireAuth, async (req: Request, res: Response) => {
+router.post("/", createEmployeeValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
 	const { depotCode, name, phone, type, Operator } = req.body as IEmployee;
 
 	const user = await Service.createEmployee({ depotCode, name, phone, type, Operator });
@@ -30,8 +31,6 @@ router.post("/", currentUser, requireAuth, async (req: Request, res: Response) =
 
 router.get("/all", currentUser, requireAuth, async (req: Request, res: Response) => {
 	const depot = req.query.depot;
-
-	console.log();
 
 	const users = await Service.getAllEmployees(depot as string);
 
