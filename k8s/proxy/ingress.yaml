@@ -10,11 +10,11 @@ spec:
     - host: bus3.dev
       http:
         paths:
-         - path: /api/ksrtc/?(.*)
+         - path: /api/srt/?(.*)
            pathType: Prefix
            backend:
               service:
-                name: ksrtc-srv
+                name: state-operators-srv
                 port:
                   number: 3000
         

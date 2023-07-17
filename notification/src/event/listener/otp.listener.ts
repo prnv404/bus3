@@ -6,21 +6,21 @@ import { OtpRepository } from "../../lib/database/repository/otp.repository";
 const repository = new OtpRepository();
 
 export class OTPNotificationListener extends KafkaListener<OTPEvent> {
-      groupId: string = TOPIC.OTP;
+	groupId: string = TOPIC.OTP;
 
-      topic: TOPIC.OTP = TOPIC.OTP;
+	topic: TOPIC.OTP = TOPIC.OTP;
 
-      constructor(client: Kafka) {
-            super(client);
-      }
+	constructor(client: Kafka) {
+		super(client);
+	}
 
-      async onMessage(data: OTPEvent["data"], message: KafkaMessage): Promise<void> {
-            await TwilioClient.messages.create({
-                  body: data.message + data.otp,
-                  from: "+16184278576",
-                  to: "+91" + data.phone,
-            });
+	async onMessage(data: OTPEvent["data"], message: KafkaMessage): Promise<void> {
+		await TwilioClient.messages.create({
+			body: data.message + data.otp,
+			from: "+16184278576",
+			to: "+91" + data.phone
+		});
 
-            await repository.create(data);
-      }
+		await repository.create(data);
+	}
 }

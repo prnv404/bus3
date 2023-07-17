@@ -8,8 +8,8 @@ build:
   local:
     push: true
   artifacts:
-    - image: prnv404/ksrtc
-      context: ksrtc
+    - image: prnv404/state-operators
+      context: state_operators
       docker:
         dockerfile: Dockerfile
       sync:

@@ -6,22 +6,27 @@ import { kafka_client } from "./config/kafka.config";
 import { OTPNotificationListener } from "./event/listener/otp.listener";
 
 (async () => {
-      try {
-            await connectToMongoDB("mongodb://mongo-srv:27017/notification");
+	try {
+		await connectToMongoDB("mongodb://mongo-srv:27017/notification");
 
-            const pushnotificationListener = new PushNotificatoinListener(kafka_client);
-            const otpListener = new OTPNotificationListener(kafka_client);
+		const pushnotificationListener = new PushNotificatoinListener(kafka_client);
+		const otpListener = new OTPNotificationListener(kafka_client);
 
-            await pushnotificationListener.listen();
-            await otpListener.listen();
+		await pushnotificationListener.listen();
+		await otpListener.listen();
 
-            app.listen(3000, () => {
-                  console.log("Server is Listening on port 3000");
-            }).on("error", async () => {
-                  await pushnotificationListener.disconnect();
-                  await otpListener.disconnect();
-            });
-      } catch (error) {
-            console.log(error);
-      }
+		app.listen(3000, () => {
+			console.log("Server is Listening on port 3000");
+		})
+			.on("error", async () => {
+				await pushnotificationListener.disconnect();
+				await otpListener.disconnect();
+			})
+			.on("close", async () => {
+				await pushnotificationListener.disconnect();
+				await otpListener.disconnect();
+			});
+	} catch (error) {
+		console.log(error);
+	}
 })();
