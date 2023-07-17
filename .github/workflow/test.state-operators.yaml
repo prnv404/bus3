@@ -1,0 +1,13 @@
+name: tests-state_operators
+
+on:
+  pull_request:
+    paths:
+      - 'state_operators/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd 'state_operators && npm install && npm run test:ci
