@@ -2,6 +2,9 @@ name: tests-state_operators
 
 on:
   pull_request:
+    branches:
+      - master
+      - dev
     paths:
       - 'state_operators/**'
 
