@@ -4,7 +4,7 @@ import { ScheduleAttrs } from "../database/mongo/models/schedule.model";
 import { ScheduleService } from "../service/schedule.service";
 import { ScheduleRepsitory } from "../database/mongo/repository/schedule.repository";
 import { ElasticSearchRepository } from "../database/elasticsearch/repository/elasticsearch.repository";
-import { createScheduleValidation } from "./validator/validator";
+import { assignDriverAndConductor, createScheduleValidation } from "./validator/validator";
 
 const router = express();
 
@@ -57,6 +57,14 @@ router.delete("/delete/:id", currentUser, requireAuth, async (req: Request, res:
 	await ElasticService.DeleteDoc(id, ELASTIC_INDEX.SCHEDULE);
 
 	res.status(200).json({ message: "Schedule Deleted SuccessFully" });
+});
+
+router.post("/assign", assignDriverAndConductor, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
+	const { conductor, driver, scheduleId } = req.body;
+
+	await Service.Assign(scheduleId, driver, conductor);
+
+	res.status(201).json({ message: "Driver And Conductor Assigned" });
 });
 
 router.get("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {

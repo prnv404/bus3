@@ -59,3 +59,9 @@ export const createScheduleValidation = [
 	body("depotCode").notEmpty().withMessage("Depot code is required"),
 	body("Operator").notEmpty().withMessage("Operator is required")
 ];
+
+export const assignDriverAndConductor = [
+	body("conductor").notEmpty().withMessage("conductor is required"),
+	body("driver").notEmpty().withMessage("driver is required"),
+	body("scheduleId").notEmpty().withMessage("scheduleId is required")
+];

@@ -14,6 +14,10 @@ export interface ScheduleAttrs {
 	depotCode: string;
 
 	Operator: string;
+
+	driver?: string;
+
+	conductor?: string;
 }
 
 interface ScheduleModel extends mongoose.Model<ScheduleDoc> {
@@ -34,6 +38,10 @@ interface ScheduleDoc extends mongoose.Document {
 	route: string;
 
 	depotCode: string;
+
+	driver?: string;
+
+	conductor?: string;
 }
 
 const ScheduleSchema = new mongoose.Schema(
@@ -67,15 +75,23 @@ const ScheduleSchema = new mongoose.Schema(
 
 			required: true
 		},
+
 		stop: {
 			type: String,
 
 			required: true
 		},
-		route: {
-			type: String,
 
-			required: true
+		driver: {
+			type: String
+		},
+
+		conductor: {
+			type: String
+		},
+
+		route: {
+			type: String
 		}
 	},
 	{

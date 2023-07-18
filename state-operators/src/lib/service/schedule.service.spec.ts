@@ -191,12 +191,45 @@ describe("ScheduleService", () => {
 		});
 	});
 
-	// Add more test cases for other methods
+	describe("Assign", () => {
+		it("should assign the driver and conductor to the schedule", async () => {
+			// Arrange
+			const scheduleId = "schedule_id";
+			const driver = "John Doe";
+			const conductor = "Jane Smith";
 
-	// Create, findById, findByDepotCode, EditSchedule, DeleteSchedule
+			const schedule = {
+				name: "Schedule 1",
+				BusNo: "Bus123",
+				start: "9:00 AM",
+				stop: "10:00 AM",
+				route: "Route 1",
+				depotCode: "Depot123",
+				Operator: "Operator 1",
+				driver: "",
+				conductor: "",
+				save: jest.fn().mockResolvedValue(null)
+			};
+
+			scheduleRepository.findById = jest.fn().mockResolvedValue(schedule);
+
+			const result = await scheduleService.Assign(scheduleId, driver, conductor);
+
+			expect(scheduleRepository.findById).toHaveBeenCalledWith(scheduleId);
+			expect(result.driver).toBe(driver);
+			expect(result.conductor).toBe(conductor);
+			expect(result.save).toHaveBeenCalled();
+		});
+
+		it("should throw BadRequestError when no schedule is found", async () => {
+			// Arrange
+			const scheduleId = "nonexistent_schedule_id";
+			const driver = "John Doe";
+			const conductor = "Jane Smith";
+
+			scheduleRepository.findById = jest.fn().mockResolvedValue(null);
+			// Act & Assert
+			await expect(scheduleService.Assign(scheduleId, driver, conductor)).rejects.toThrowError("NO Schedule Found !");
+		});
+	});
 });
-
-// Add more test cases for other methods
-
-// Create, findByname, findByDepotCode, EditSchedule, DeleteSchedule
-// findById, findByname, findByDepotCode, EditSchedule, DeleteSchedule
