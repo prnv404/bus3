@@ -35,7 +35,9 @@ export const createDepotValidation = [
 	body("depotCode").notEmpty().withMessage("Depot code is required"),
 	body("district").notEmpty().withMessage("District is required"),
 	body("name").notEmpty().withMessage("Depot name is required"),
-	body("Operator").notEmpty().withMessage("Operator is required")
+	body("Operator").notEmpty().withMessage("Operator is required"),
+	body("lat").notEmpty().withMessage("langitude is required"),
+	body("lng").notEmpty().withMessage("longitude is required")
 ];
 
 // EMPLOYEE CONTROLLER VALIDATON

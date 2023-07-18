@@ -12,9 +12,8 @@ const Service = new DepotService(new DepotRepository());
 const ElasticService = new ElasticSearchRepository();
 
 router.post("/", createDepotValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
-	const { depotCode, district, name, Operator } = req.body as DepotAttrs;
-
-	const depot = await Service.createDepots({ depotCode, district, name, Operator });
+	const { depotCode, district, name, Operator, lat, lng } = req.body as DepotAttrs;
+	const depot = await Service.createDepots({ depotCode, district, name, Operator, lat, lng });
 
 	// Add the Depot to elastic search
 	await ElasticService.AddDoc(depot.id, ELASTIC_INDEX.DEPOT, depot);
