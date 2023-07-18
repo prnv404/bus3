@@ -68,4 +68,17 @@ export class ScheduleService {
 
 		return schedule;
 	}
+
+	async Assign(scheduleId: string, driver: string, conductor: string) {
+		const schedule = await this.scheduleRepsitory.findById(scheduleId);
+
+		if (!schedule) throw new BadRequestError("NO Schedule Found !");
+
+		schedule.driver = driver;
+		schedule.conductor = conductor;
+
+		await schedule.save();
+
+		return schedule;
+	}
 }

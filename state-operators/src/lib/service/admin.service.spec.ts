@@ -7,9 +7,13 @@ describe("AdminService", () => {
 	let adminService: AdminService;
 	let adminRepository: AdminRepository;
 
+<<<<<<< HEAD
 
 	beforeAll(() => {
 
+=======
+	beforeAll(() => {
+>>>>>>> dev
 		adminRepository = new AdminRepository();
 		adminService = new AdminService(adminRepository);
 	});
