@@ -5,7 +5,7 @@ import { PingElasticSearch } from "./config/elasticsearch.config";
 
 (async () => {
 	try {
-		await connectToMongoDB("mongodb://mongo-srv:27017/ksrtc");
+		await connectToMongoDB("mongodb://mongo-srv:27017/srt");
 
 		await PingElasticSearch();
 
