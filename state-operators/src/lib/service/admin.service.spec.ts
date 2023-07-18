@@ -7,7 +7,9 @@ describe("AdminService", () => {
 	let adminService: AdminService;
 	let adminRepository: AdminRepository;
 
-	beforeEach(() => {
+
+	beforeAll(() => {
+
 		adminRepository = new AdminRepository();
 		adminService = new AdminService(adminRepository);
 	});

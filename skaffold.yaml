@@ -9,7 +9,7 @@ build:
     push: true
   artifacts:
     - image: prnv404/state-operators
-      context: state_operators
+      context: state-operators
       docker:
         dockerfile: Dockerfile
       sync:
