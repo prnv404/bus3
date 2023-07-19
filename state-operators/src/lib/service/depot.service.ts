@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { BadRequestError } from "@prnv404/bus3";
 import { DepotAttrs } from "../database/mongo/models/depot.model";
 import { DepotRepository } from "../database/mongo/repository/depot.repository";

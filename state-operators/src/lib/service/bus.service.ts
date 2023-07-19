@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { BadRequestError } from "@prnv404/bus3";
 import { BusAttrs } from "../database/mongo/models/buses.model";
 import { BusRepository } from "../database/mongo/repository/bus.repository";

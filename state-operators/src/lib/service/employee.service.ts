@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { BadRequestError } from "@prnv404/bus3";
 import { EmployeeAttrs } from "../database/mongo/models/employee.model";
 import { EmployeeRepository } from "../database/mongo/repository/employee.repository";

@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { BadRequestError, Password } from "@prnv404/bus3";
 import { AdminAttrs } from "../database/mongo/models/admin.model";
 import { AdminRepository } from "../database/mongo/repository/admin.repository";
