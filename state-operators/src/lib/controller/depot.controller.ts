@@ -5,10 +5,13 @@ import { ELASTIC_INDEX, currentUser, requireAuth, validateRequest } from "@prnv4
 import { DepotAttrs } from "../database/mongo/models/depot.model";
 import { ElasticSearchRepository } from "../database/elasticsearch/repository/elasticsearch.repository";
 import { createDepotValidation } from "./validator/validator";
+import { container } from "tsyringe";
 
 const router = express();
 
-const Service = new DepotService(new DepotRepository());
+// const Service = new DepotService(new DepotRepository());
+const Service = container.resolve(DepotService);
+
 const ElasticService = new ElasticSearchRepository();
 
 router.post("/", createDepotValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {

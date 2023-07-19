@@ -4,10 +4,12 @@ import { EmployeeService } from "../service/employee.service";
 import { EmployeeRepository } from "../database/mongo/repository/employee.repository";
 import { DepotRepository } from "../database/mongo/repository/depot.repository";
 import { createEmployeeValidation } from "./validator/validator";
+import { container } from "tsyringe";
 
 const router = express();
 
-const Service = new EmployeeService(new EmployeeRepository(), new DepotRepository());
+// const Service = new EmployeeService(new EmployeeRepository(), new DepotRepository());
+const Service = container.resolve(EmployeeService);
 
 export interface IEmployee {
 	name: string;

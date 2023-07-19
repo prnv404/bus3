@@ -3,7 +3,9 @@ import { EmployeeAttrs } from "../database/mongo/models/employee.model";
 import { EmployeeRepository } from "../database/mongo/repository/employee.repository";
 import { IEmployee } from "../controller/employee.controller";
 import { DepotRepository } from "../database/mongo/repository/depot.repository";
+import { autoInjectable } from "tsyringe";
 
+@autoInjectable()
 export class EmployeeService {
 	constructor(
 		private readonly employeeRepository: EmployeeRepository,

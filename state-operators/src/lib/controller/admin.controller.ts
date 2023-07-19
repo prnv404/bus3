@@ -6,10 +6,11 @@ import { currentUser, requireAuth, validateRequest } from "@prnv404/bus3";
 import { SENDOTPNOTIFICATION } from "../../events/publisher/otp.publisher";
 import { kafka_client } from "../../config/kafka.config";
 import { signinValidation, signupValidation, verifyOtpValidation } from "./validator/validator";
+import { container } from "tsyringe";
 
 const router = express.Router();
 
-const Service = new AdminService(new AdminRepository());
+const Service = container.resolve(AdminService);
 
 interface AdminInterface {
 	phone: number;
@@ -32,7 +33,7 @@ router.post("/signup", signupValidation, validateRequest, async (req: Request, r
 		userId: user.id,
 		phone: user.phone,
 		otp: String(user.otp),
-		message: "YOUR ONE TIME VEIFIFCATION CODE IS "
+		message: "YOUR ONE TIME VERIFIFCATION CODE IS "
 	});
 
 	res.status(201).send({ message: "OTP Sended To Your PhoneNumber " + phone });
