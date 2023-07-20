@@ -1,8 +1,12 @@
+import "reflect-metadata";
+
 import { BadRequestError } from "@prnv404/bus3";
 import { BusAttrs } from "../database/mongo/models/buses.model";
 import { BusRepository } from "../database/mongo/repository/bus.repository";
 import { DepotRepository } from "../database/mongo/repository/depot.repository";
+import { autoInjectable } from "tsyringe";
 
+@autoInjectable()
 export class BusService {
 	constructor(
 		private readonly busRepository: BusRepository,

@@ -1,7 +1,11 @@
+import "reflect-metadata";
+
 import { BadRequestError } from "@prnv404/bus3";
 import { ScheduleAttrs } from "../database/mongo/models/schedule.model";
 import { ScheduleRepsitory } from "../database/mongo/repository/schedule.repository";
+import { autoInjectable } from "tsyringe";
 
+@autoInjectable()
 export class ScheduleService {
 	constructor(private readonly scheduleRepsitory: ScheduleRepsitory) {}
 

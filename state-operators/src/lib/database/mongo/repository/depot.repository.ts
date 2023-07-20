@@ -2,9 +2,9 @@ import { Depot, DepotAttrs } from "../models/depot.model";
 
 export class DepotRepository {
 	async create(data: DepotAttrs) {
-		const { depotCode, district, name, Operator } = data;
+		const { depotCode, district, name, Operator, lat, lng } = data;
 
-		const depot = Depot.build({ depotCode, district, name, Operator });
+		const depot = Depot.build({ depotCode, district, name, Operator, lat, lng });
 
 		return await depot.save();
 	}

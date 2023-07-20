@@ -5,10 +5,11 @@ import { ScheduleService } from "../service/schedule.service";
 import { ScheduleRepsitory } from "../database/mongo/repository/schedule.repository";
 import { ElasticSearchRepository } from "../database/elasticsearch/repository/elasticsearch.repository";
 import { assignDriverAndConductor, createScheduleValidation } from "./validator/validator";
+import { container } from "tsyringe";
 
 const router = express();
 
-const Service = new ScheduleService(new ScheduleRepsitory());
+const Service = container.resolve(ScheduleService);
 const ElasticService = new ElasticSearchRepository();
 
 router.post("/", createScheduleValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {

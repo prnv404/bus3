@@ -9,6 +9,10 @@ export interface DepotAttrs {
 
 	Operator: string;
 
+	lat?: string;
+
+	lng?: string;
+
 	employees?: string[];
 
 	buses?: string[];
@@ -28,6 +32,10 @@ interface DepotDoc extends mongoose.Document {
 	Operator: string;
 
 	district: string;
+
+	lat?: string;
+
+	lng?: string;
 
 	employees: string[];
 

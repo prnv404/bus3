@@ -6,10 +6,12 @@ import { BusRepository } from "../database/mongo/repository/bus.repository";
 import { DepotRepository } from "../database/mongo/repository/depot.repository";
 import { ElasticSearchRepository } from "../database/elasticsearch/repository/elasticsearch.repository";
 import { createBusValidation } from "./validator/validator";
+import { container } from "tsyringe";
 
 const router = express();
 
-const Service = new BusService(new BusRepository(), new DepotRepository());
+const Service = container.resolve(BusService);
+
 const ElasticService = new ElasticSearchRepository();
 
 router.post("/", createBusValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {

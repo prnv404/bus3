@@ -17,4 +17,10 @@ spec:
                 name: state-operators-srv
                 port:
                   number: 3000
-        
+         - path: /api/pvt/?(.*)
+           pathType: Prefix
+           backend:
+              service:
+                name: private-operators-srv
+                port:
+                  number: 3000   
