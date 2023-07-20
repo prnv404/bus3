@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { BadRequestError, Password } from "@prnv404/bus3";
 import { PvtOperatorAttrs } from "../database/mongo/models/pvt-operator.model";
 import { PvtOperatorRepository } from "../database/mongo/repository/pvt.operator.repository";

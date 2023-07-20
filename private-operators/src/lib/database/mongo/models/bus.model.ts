@@ -43,12 +43,6 @@ const BusSchema = new mongoose.Schema(
 			required: true
 		},
 
-		depotCode: {
-			type: String,
-
-			required: true
-		},
-
 		seats: {
 			type: Number,
 

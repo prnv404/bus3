@@ -45,3 +45,15 @@ export const OtpValidation = [
 
 	body("otp").notEmpty().withMessage("otp number is required")
 ];
+
+export const busValidation = [
+	body("BusNo").notEmpty().withMessage("BusNo is required").isString().withMessage("BusNo must be a string"),
+	body("type").notEmpty().withMessage("Type is required").isString().withMessage("Type must be a string"),
+	body("seats").notEmpty().withMessage("Seats is required").isInt().withMessage("Seats must be an integer")
+];
+
+export const EditBusValidation = [
+	body("BusNo").isString().withMessage("BusNo must be a string"),
+	body("type").isString().withMessage("Type must be a string"),
+	body("seats").isInt().withMessage("Seats must be an integer")
+];
