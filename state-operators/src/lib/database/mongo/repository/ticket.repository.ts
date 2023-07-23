@@ -5,31 +5,25 @@ export class TicketRepository {
 
 	async Create(data: TicketAttrs) {
 		const ticket = await Ticket.build(data).save();
-
 		return ticket;
 	}
 
-	async findById(id: string) {
+	async findbyId(id: string) {
 		const ticket = await Ticket.findById(id);
-
 		return ticket;
 	}
 
-	async findByAllTicket(OperatorId: string) {
-		const tickets = await Ticket.find({ OperatorId });
-
-		return tickets;
+	async findByOperatorId(id: string) {
+		const ticket = await Ticket.findOne({ OperatorId: id });
+		return ticket;
 	}
 
-	async findTicketByDate(OperatorId: string, date: string) {
+	async findByDate(date: Date) {
 		const tickets = await Ticket.find({
-			OperatorId,
 			createdAt: {
-				$gte: date,
-				$lt: new Date()
+				$lt: date
 			}
 		});
-
 		return tickets;
 	}
 }

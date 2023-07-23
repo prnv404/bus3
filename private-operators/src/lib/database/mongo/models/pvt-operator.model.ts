@@ -6,11 +6,9 @@ export interface PvtOperatorAttrs {
 
 	phone: string;
 
-	password: string;
-
 	district: string;
 
-	otp: string;
+	otp: string | null;
 
 	isVerified?: boolean;
 
@@ -28,9 +26,7 @@ interface PvtOperatorDoc extends mongoose.Document {
 
 	phone: string;
 
-	password: string;
-
-	otp: string;
+	otp: string | null;
 
 	isVerified: boolean;
 
@@ -54,10 +50,6 @@ const PvtOperatorSchema = new mongoose.Schema(
 		},
 
 		phone: {
-			type: String,
-			required: true
-		},
-		password: {
 			type: String,
 			required: true
 		},

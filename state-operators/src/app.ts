@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import "express-async-errors";
 import "dotenv/config";
 
 import express, { Request, Response } from "express";
@@ -20,9 +19,7 @@ app.use(express.json());
 
 app.use(cookieSession({ signed: false, secure: false }));
 
-
 app.use(morgan("dev"));
-
 
 app.use("/api/srt/depot", DepotRouter);
 

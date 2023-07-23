@@ -20,16 +20,14 @@ export class PvtOperatorService {
 		return operator;
 	}
 
-	async Signin(phone: string, password: string) {
+	async Signin(phone: string, otp: string) {
 		const operator = await this.pvtRepository.findbyPhone(phone);
 
 		if (!operator) throw new BadRequestError("Operator dosent exist");
 
-		if (operator.isVerified === false) throw new BadRequestError("Operator is not verified");
+		operator.otp = otp;
 
-		const passwordCorrect = await Password.compare(operator.password, password);
-
-		if (!passwordCorrect) throw new BadRequestError("Password was not Correct");
+		await operator.save();
 
 		return operator;
 	}
@@ -52,6 +50,8 @@ export class PvtOperatorService {
 		if (IsOtpCorrect === false) throw new BadRequestError("OTP is Not Correct");
 
 		user.isVerified = true;
+
+		user.otp = null;
 
 		await user.save();
 
