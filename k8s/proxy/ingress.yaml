@@ -9,7 +9,7 @@ spec:
   rules:
     - host: bus3.dev
       http:
-        paths:
+        paths: 
          - path: /api/srt/?(.*)
            pathType: Prefix
            backend:
@@ -24,3 +24,10 @@ spec:
                 name: private-operators-srv
                 port:
                   number: 3000   
+         - path: /api/?(.*)
+           pathType: Prefix
+           backend:
+              service:
+                name: passenger-srv
+                port:
+                  number: 3000  

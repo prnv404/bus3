@@ -1,7 +1,7 @@
-import { TicketEventToPvt } from "../../events/publisher/ticket.pvt.publisher";
-import { TicketEventToSrt } from "../../events/publisher/ticket.srtc.publisher";
+import { TicketEventToPvt } from "../events/publisher/ticket.pvt.publisher";
+import { TicketEventToSrt } from "../events/publisher/ticket.srtc.publisher";
 import { autoInjectable } from "tsyringe";
-import { kafka_client } from "../../config/kafka.config";
+import { kafka_client } from "../config/kafka.config";
 
 export interface TicketInterface {
 	busNo: string;

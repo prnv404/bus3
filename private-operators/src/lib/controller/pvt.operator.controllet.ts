@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { OtpValidation, PvtOperatorSigninValidaton, PvtOperatorValidation } from "./validator/validator";
+import { OtpValidation, PvtOperatorSigninValidaton } from "./validator/validator";
 import { currentUser, requireAuth, validateRequest } from "@prnv404/bus3";
 import { PvtOperatorAttrs } from "../database/mongo/models/pvt-operator.model";
 import { PvtOperatorService } from "../service/pvt.operator.service";

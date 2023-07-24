@@ -1,6 +1,5 @@
 import mqtt from "mqtt";
 import { MessageHandler, TicketInterface } from "./message.handler";
-import { TicketEventPvt } from "@prnv404/bus3";
 import { autoInjectable } from "tsyringe";
 
 @autoInjectable()

@@ -45,8 +45,7 @@ const PvtOperatorSchema = new mongoose.Schema(
 		},
 
 		otp: {
-			type: String,
-			required: true
+			type: String
 		},
 
 		phone: {

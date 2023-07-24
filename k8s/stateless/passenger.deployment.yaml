@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: passenger-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: passenger
+  template:
+    metadata:
+      labels:
+        app: passenger
+    spec:
+      containers:
+        - name: passenger
+          image: prnv404/passenger
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: passenger-srv
+spec:
+  selector:
+    app: passenger
+  ports:
+    - name: passenger
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

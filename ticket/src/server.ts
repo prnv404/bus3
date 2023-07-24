@@ -1,29 +1,39 @@
 import "reflect-metadata";
-import { MQTTService } from "./lib/service/mqtt.service";
+import { MQTTService } from "./service/mqtt.service";
 import { container } from "tsyringe";
-import app from "./app";
-import { connectToMongoDB } from "@prnv404/bus3";
 
 const mqttService = container.resolve(MQTTService);
 
 const start = async () => {
-	await connectToMongoDB("mongodb://mongo-srv:27017/ticket");
-
 	await mqttService.connect("mqtt://bus3-listeners:1883");
 
 	await mqttService.subscribe("bus/srt/+/ticket");
 
 	await mqttService.subscribe("bus/pvt/+/ticket");
 
-	app.listen(3000, () => {
-		console.log("Server is Listening on port 3000");
-	})
-		.on("error", async () => {
-			await mqttService.disconnect();
-		})
-		.on("close", async () => {
-			await mqttService.disconnect();
-		});
+	// setInterval(async () => {
+	// 	await mqttService.publish("bus/pvt/64be144ccbaa5636dc8b2824/ticket", {
+	// 		busNo: "BUS10",
+	// 		from: "ALAPPUZHA",
+	// 		to: "AMBALAPPUZHA",
+	// 		OperatorId: "64be144ccbaa5636dc8b2824",
+	// 		price: 15,
+	// 		route: "ALP-AMB",
+	// 		srt: false
+	// 	});
+	// }, 2000);
+
+	// setInterval(async () => {
+	// 	await mqttService.publish("bus/pvt/64be18d982af82bedad661af/ticket", {
+	// 		busNo: "BUS10",
+	// 		from: "ALAPPUZHA",
+	// 		to: "AMBALAPPUZHA",
+	// 		OperatorId: "64be18d982af82bedad661af",
+	// 		price: 15,
+	// 		route: "ALP-AMB",
+	// 		srt: true
+	// 	});
+	// }, 2000);
 };
 
 start();

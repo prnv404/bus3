@@ -40,3 +40,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: prnv404/passenger
+      context: passenger
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
