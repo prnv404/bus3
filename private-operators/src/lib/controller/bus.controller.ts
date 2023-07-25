@@ -1,4 +1,4 @@
-import { currentUser, requireAuth, validateRequest } from "@prnv404/bus3";
+import { currentUser, requireAuth, sanitizeData, validateRequest } from "@prnv404/bus3";
 import express, { Request, Response } from "express";
 import { BusAttrs } from "../database/mongo/models/bus.model";
 import { container } from "tsyringe";
@@ -9,7 +9,7 @@ const router = express.Router();
 
 const Service = container.resolve(BusService);
 
-router.post("/", busValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
+router.post("/", sanitizeData, busValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
 	const { BusNo, seats, type } = req.body as BusAttrs;
 
 	const OperatorId = req.currentUser?.id!;
@@ -19,7 +19,7 @@ router.post("/", busValidation, validateRequest, currentUser, requireAuth, async
 	res.status(201).json({ bus });
 });
 
-router.put("/:id", EditBusValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
+router.put("/:id", sanitizeData, EditBusValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
 	const id = req.params.id;
 
 	const { BusNo, OperatorId, seats, type } = req.body as BusAttrs;

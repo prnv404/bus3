@@ -2,6 +2,7 @@ import { autoInjectable } from "tsyringe";
 import { TicketAttrs } from "../database/mongo/models/ticket.model";
 import { TicketRepository } from "../database/mongo/repository/ticket.repository";
 import { PvtOperatorRepository } from "../database/mongo/repository/pvt.operator.repository";
+import { BadRequestError } from "@prnv404/bus3";
 
 @autoInjectable()
 export class TicketService {
@@ -27,11 +28,20 @@ export class TicketService {
 	}
 
 	async findAll(operatorId: string) {
+		console.log(operatorId);
 		const tickets = await this.ticketRepsoitory.findByAllTicket(operatorId);
 		return tickets;
 	}
 
-	async findByDate(date: string) {
-		// const ticket = await this.ticketRepsoitory.findTicketByDate(date);
+	async findByDate(operatorid: string, date: string) {
+		const searchDate = new Date(date);
+		const tickets = await this.ticketRepsoitory.findTicketByDate(operatorid, searchDate);
+		if (tickets.length == 0) throw new BadRequestError("No ticket Found");
+		return tickets;
+	}
+
+	async GetTicketRevenue(operatorId: string, startDate: string, endDate: string) {
+		const revenue = await this.ticketRepsoitory.getRevenue(operatorId, startDate, endDate);
+		return revenue;
 	}
 }

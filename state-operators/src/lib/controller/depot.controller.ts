@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import { DepotRepository } from "../database/mongo/repository/depot.repository";
 import { DepotService } from "../service/depot.service";
-import { ELASTIC_INDEX, currentUser, requireAuth, validateRequest } from "@prnv404/bus3";
+import { ELASTIC_INDEX, currentUser, requireAuth, sanitizeData, validateRequest } from "@prnv404/bus3";
 import { DepotAttrs } from "../database/mongo/models/depot.model";
 import { ElasticSearchRepository } from "../database/elasticsearch/repository/elasticsearch.repository";
 import { createDepotValidation } from "./validator/validator";
@@ -14,7 +14,7 @@ const Service = container.resolve(DepotService);
 
 const ElasticService = new ElasticSearchRepository();
 
-router.post("/", createDepotValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
+router.post("/", sanitizeData, createDepotValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
 	const { depotCode, district, name, Operator, lat, lng } = req.body as DepotAttrs;
 	const depot = await Service.createDepots({ depotCode, district, name, Operator, lat, lng });
 
@@ -38,7 +38,7 @@ router.get("/:id", currentUser, requireAuth, async (req: Request, res: Response)
 	res.send(Depot);
 });
 
-router.patch("/edit/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
+router.patch("/edit/:id", sanitizeData, currentUser, requireAuth, async (req: Request, res: Response) => {
 	const id = req.params.id;
 
 	const { name, district, depotCode, Operator } = req.body as DepotAttrs;

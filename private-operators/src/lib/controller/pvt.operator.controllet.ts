@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { OtpValidation, PvtOperatorSigninValidaton } from "./validator/validator";
-import { currentUser, requireAuth, validateRequest } from "@prnv404/bus3";
+import { currentUser, requireAuth, sanitizeData, validateRequest } from "@prnv404/bus3";
 import { PvtOperatorAttrs } from "../database/mongo/models/pvt-operator.model";
 import { PvtOperatorService } from "../service/pvt.operator.service";
 import { SENDOTPNOTIFICATION } from "../../events/publisher/otp.publisher";
@@ -12,7 +12,7 @@ const router = express.Router();
 
 const Service = container.resolve(PvtOperatorService);
 
-router.post("/signin", PvtOperatorSigninValidaton, validateRequest, async (req: Request, res: Response) => {
+router.post("/signin", sanitizeData, PvtOperatorSigninValidaton, validateRequest, async (req: Request, res: Response) => {
 	const { phone } = req.body as PvtOperatorAttrs;
 
 	const otp = String(Math.floor(1000 + Math.random() * 9000));

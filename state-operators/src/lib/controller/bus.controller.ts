@@ -1,4 +1,4 @@
-import { currentUser, requireAuth, ELASTIC_INDEX, validateRequest } from "@prnv404/bus3";
+import { currentUser, requireAuth, ELASTIC_INDEX, validateRequest, sanitizeData } from "@prnv404/bus3";
 import express, { Request, Response } from "express";
 import { BusAttrs } from "../database/mongo/models/buses.model";
 import { BusService } from "../service/bus.service";
@@ -14,7 +14,7 @@ const Service = container.resolve(BusService);
 
 const ElasticService = new ElasticSearchRepository();
 
-router.post("/", createBusValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
+router.post("/", sanitizeData, createBusValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
 	let data = req.body as BusAttrs;
 
 	const bus = await Service.CreateBus(data);
@@ -43,7 +43,7 @@ router.get("/:id", currentUser, requireAuth, async (req: Request, res: Response)
 	res.status(200).json(bus);
 });
 
-router.patch("/edit/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
+router.patch("/edit/:id", sanitizeData, currentUser, requireAuth, async (req: Request, res: Response) => {
 	const id = req.params.id;
 
 	let data = req.body as BusAttrs;

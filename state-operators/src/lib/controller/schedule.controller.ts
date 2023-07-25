@@ -1,4 +1,4 @@
-import { ELASTIC_INDEX, currentUser, requireAuth, validateRequest } from "@prnv404/bus3";
+import { ELASTIC_INDEX, currentUser, requireAuth, sanitizeData, validateRequest } from "@prnv404/bus3";
 import express, { Request, Response } from "express";
 import { ScheduleAttrs } from "../database/mongo/models/schedule.model";
 import { ScheduleService } from "../service/schedule.service";
@@ -12,7 +12,7 @@ const router = express();
 const Service = container.resolve(ScheduleService);
 const ElasticService = new ElasticSearchRepository();
 
-router.post("/", createScheduleValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
+router.post("/", sanitizeData, createScheduleValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
 	const data = req.body as ScheduleAttrs;
 
 	const schedule = await Service.Create(data);
@@ -39,7 +39,7 @@ router.get("/all", currentUser, requireAuth, async (req: Request, res: Response)
 	res.status(200).json(schedules);
 });
 
-router.patch("/edit/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
+router.patch("/edit/:id", sanitizeData, currentUser, requireAuth, async (req: Request, res: Response) => {
 	const id = req.params.id;
 	const data = req.body as ScheduleAttrs;
 
@@ -60,13 +60,21 @@ router.delete("/delete/:id", currentUser, requireAuth, async (req: Request, res:
 	res.status(200).json({ message: "Schedule Deleted SuccessFully" });
 });
 
-router.post("/assign", assignDriverAndConductor, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
-	const { conductor, driver, scheduleId } = req.body;
+router.post(
+	"/assign",
+	sanitizeData,
+	assignDriverAndConductor,
+	validateRequest,
+	currentUser,
+	requireAuth,
+	async (req: Request, res: Response) => {
+		const { conductor, driver, scheduleId } = req.body;
 
-	await Service.Assign(scheduleId, driver, conductor);
+		await Service.Assign(scheduleId, driver, conductor);
 
-	res.status(201).json({ message: "Driver And Conductor Assigned" });
-});
+		res.status(201).json({ message: "Driver And Conductor Assigned" });
+	}
+);
 
 router.get("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
 	const id = req.params.id;

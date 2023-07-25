@@ -21,7 +21,7 @@ const start = async () => {
 	// 		route: "ALP-AMB",
 	// 		srt: false
 	// 	});
-	// }, 2000);
+	// }, 1000);
 
 	// setInterval(async () => {
 	// 	await mqttService.publish("bus/pvt/64be18d982af82bedad661af/ticket", {

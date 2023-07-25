@@ -15,14 +15,13 @@ export interface PassengertAttrs {
 	type: "student" | "regular";
 
 	isVerified: boolean; //
+	institution?: string;
 
 	favBus: string[]; //
 
 	favRoute: string[]; //
 
 	age?: string; //
-
-	institution?: string;
 
 	favSchedule: string[]; //
 
