@@ -17,6 +17,8 @@ export interface TicketInterface {
 	from: string;
 
 	to: string;
+
+	depotCode?: string;
 }
 
 const ticketToPvt = new TicketEventToPvt(kafka_client);

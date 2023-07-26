@@ -8,49 +8,47 @@ const router = express();
 const Service = container.resolve(TicketService);
 
 router.get("/all", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const operatorId = req.currentUser?.id!;
-	console.log(operatorId);
-	const result = await Service.findAll(operatorId);
-
+	const depotCode = req.query.depotCode as string;
+	const result = await Service.findAll(depotCode);
 	return res.status(200).json({ count: result.length, result });
 });
 
 router.get("/date", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const operatorId = req.currentUser?.id!;
+	const depotCode = req.query.depotCode as string;
 
 	const date = req.query.date as string;
 
-	const result = await Service.findByDate(operatorId, date);
+	const result = await Service.findByDate(depotCode, date);
 
 	return res.status(200).json({ count: result.length, result });
 });
 
 router.get("/revenue/day", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const operatorId = req.currentUser?.id!;
+	const depotCode = req.query.depotCode as string;
 
 	const startDate = req.query.startDate as string;
 
-	const result = await Service.GetTicketRevenueofDay(operatorId, startDate);
+	const result = await Service.GetTicketRevenueofDay(depotCode, startDate);
 
 	return res.status(200).json({ result });
 });
 
 router.get("/revenue/week", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const operatorId = req.currentUser?.id!;
+	const depotCode = req.query.depotCode as string;
 
 	const startDate = req.query.startDate as string;
 
-	const result = await Service.GetTicketRevenueofWeek(operatorId, startDate);
+	const result = await Service.GetTicketRevenueofWeek(depotCode, startDate);
 
 	return res.status(200).json({ result });
 });
 
 router.get("/revenue/month", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const operatorId = req.currentUser?.id!;
+	const depotCode = req.query.depotCode as string;
 
 	const startDate = req.query.startDate as string;
 
-	const result = await Service.GetTicketRevenueofMonth(operatorId, startDate);
+	const result = await Service.GetTicketRevenueofMonth(depotCode, startDate);
 
 	return res.status(200).json({ result });
 });

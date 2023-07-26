@@ -10,6 +10,7 @@ import { AdminRouter } from "./lib/controller/admin.controller";
 import { EmployeeRouter } from "./lib/controller/employee.controller";
 import { BusRouter } from "./lib/controller/bus.controller";
 import { ScheduleRouter } from "./lib/controller/schedule.controller";
+import { TicketRouter } from "./lib/controller/tikcet.controller";
 
 const app = express();
 
@@ -22,14 +23,11 @@ app.use(cookieSession({ signed: false, secure: false }));
 app.use(morgan("dev"));
 
 app.use("/api/srt/depot", DepotRouter);
-
 app.use("/api/srt/admin", AdminRouter);
-
 app.use("/api/srt/employee", EmployeeRouter);
-
 app.use("/api/srt/bus", BusRouter);
-
 app.use("/api/srt/schedule", ScheduleRouter);
+app.use("/api/srt/ticket", TicketRouter);
 
 app.all("*", async (req: Request, res: Response) => {
 	throw new NotFoundError();

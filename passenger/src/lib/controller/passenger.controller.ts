@@ -22,18 +22,19 @@ router.put("/edit", sanitizeData, editValidatoin, validateRequest, currentUser, 
 	res.status(200).json({ passenger });
 });
 
-router.post("/bus", sanitizeData, busValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
+router.post("/bus", busValidation, validateRequest, sanitizeData, currentUser, requireAuth, async (req: Request, res: Response) => {
 	const passengerId = req.currentUser?.id!;
 	const { busNo, addDelete } = req.body;
+	console.log(req.body);
 	const passenger = await Service.Bus(passengerId, busNo, addDelete);
 	res.status(200).json({ passenger });
 });
 
 router.post(
 	"/schedule",
-	sanitizeData,
 	scheduleValidation,
 	validateRequest,
+	sanitizeData,
 	currentUser,
 	requireAuth,
 	async (req: Request, res: Response) => {
@@ -44,7 +45,7 @@ router.post(
 	}
 );
 
-router.post("/route", sanitizeData, routeValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
+router.post("/route", routeValidation, validateRequest, sanitizeData, currentUser, requireAuth, async (req: Request, res: Response) => {
 	const passengerId = req.currentUser?.id!;
 	const { routeId, addDelete } = req.body;
 	const passenger = await Service.BusRoute(passengerId, routeId, addDelete);

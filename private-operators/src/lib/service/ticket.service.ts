@@ -40,8 +40,16 @@ export class TicketService {
 		return tickets;
 	}
 
-	async GetTicketRevenue(operatorId: string, startDate: string, endDate: string) {
-		const revenue = await this.ticketRepsoitory.getRevenue(operatorId, startDate, endDate);
+	async GetTicketRevenueofDay(operatorId: string, startDate: string) {
+		const revenue = await this.ticketRepsoitory.getRevenueofDay(operatorId, startDate);
+		return revenue;
+	}
+	async GetTicketRevenueofWeek(operatorId: string, startDate: string) {
+		const revenue = await this.ticketRepsoitory.getRevenueofWeek(operatorId, startDate);
+		return revenue;
+	}
+	async GetTicketRevenueofMonth(operatorId: string, startDate: string) {
+		const revenue = await this.ticketRepsoitory.getRevenueofMonth(operatorId, startDate);
 		return revenue;
 	}
 }

@@ -36,7 +36,7 @@ export class TicketRepository {
 		return tickets;
 	}
 
-	async getRevenue(operatorId: string, startDate: string, endDate: string) {
+	async getRevenueofDay(operatorId: string, startDate: string) {
 		const operatorObjectId = new mongoose.Types.ObjectId(operatorId);
 		const startdate = new Date(startDate);
 		const ticketRevenue = await Ticket.aggregate([
@@ -44,7 +44,54 @@ export class TicketRepository {
 				$match: {
 					OperatorId: operatorObjectId,
 					createdAt: {
-						$lte: startdate
+						$gte: startdate,
+						$lt: new Date(startdate.getTime() + 24 * 60 * 60 * 1000)
+					}
+				}
+			},
+			{
+				$group: {
+					_id: null,
+					totalCollection: { $sum: "$price" }
+				}
+			}
+		]);
+		return ticketRevenue;
+	}
+
+	async getRevenueofWeek(operatorId: string, startDate: string) {
+		const operatorObjectId = new mongoose.Types.ObjectId(operatorId);
+		const startdate = new Date(startDate);
+		const ticketRevenue = await Ticket.aggregate([
+			{
+				$match: {
+					OperatorId: operatorObjectId,
+					createdAt: {
+						$gte: startdate,
+						$lt: new Date(startdate.getTime() + 7 * 24 * 60 * 60 * 1000)
+					}
+				}
+			},
+			{
+				$group: {
+					_id: null,
+					totalCollection: { $sum: "$price" }
+				}
+			}
+		]);
+		return ticketRevenue;
+	}
+
+	async getRevenueofMonth(operatorId: string, startDate: string) {
+		const operatorObjectId = new mongoose.Types.ObjectId(operatorId);
+		const startdate = new Date(startDate);
+		const ticketRevenue = await Ticket.aggregate([
+			{
+				$match: {
+					OperatorId: operatorObjectId,
+					createdAt: {
+						$gte: startdate,
+						$lt: new Date(startdate.getFullYear(), startdate.getMonth() + 1, 0)
 					}
 				}
 			},

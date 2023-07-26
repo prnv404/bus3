@@ -12,6 +12,8 @@ export interface TicketAttrs {
 	from: string;
 
 	to: string;
+
+	depotCode?: string;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -30,6 +32,8 @@ interface TicketDoc extends mongoose.Document {
 	from: string;
 
 	to: string;
+
+	depotCode: string;
 }
 
 const TicketSchema = new mongoose.Schema(
@@ -41,6 +45,12 @@ const TicketSchema = new mongoose.Schema(
 		},
 
 		route: {
+			type: String,
+
+			required: true
+		},
+
+		depotCode: {
 			type: String,
 
 			required: true
