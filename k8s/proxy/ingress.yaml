@@ -31,3 +31,17 @@ spec:
                 name: passenger-srv
                 port:
                   number: 3000  
+         - path: /api/lt?(.*)
+           pathType: Prefix
+           backend:
+              service:
+                name: live-tracking-srv
+                port:
+                  number: 3000  
+         - path: /api/search?(.*)
+           pathType: Prefix
+           backend:
+              service:
+                name: search-srv
+                port:
+                  number: 3000  

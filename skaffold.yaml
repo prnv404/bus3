@@ -48,3 +48,19 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: prnv404/live-tracking
+      context: live-tracking
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: prnv404/search
+      context: search
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .

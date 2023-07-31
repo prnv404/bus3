@@ -50,4 +50,10 @@ router.delete("/signout", currentUser, requireAuth, async (req: Request, res: Re
 	res.status(200).send({ message: "signout  successfully" });
 });
 
+router.get("/profile", currentUser, requireAuth, async (req: Request, res: Response) => {
+	const userId = req.currentUser?.id!;
+	const passenger = await Service.GetProfile(userId);
+	res.status(200).send({ passenger });
+});
+
 export { router as AuthRouter };
