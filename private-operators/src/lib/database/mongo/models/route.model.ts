@@ -26,4 +26,4 @@ const RouteSchema = new Schema<IRoute>({
 	}
 });
 
-export const RouteModel = model<IRoute>("Stop", RouteSchema);
+export const RouteModel = model<IRoute>("Route", RouteSchema);

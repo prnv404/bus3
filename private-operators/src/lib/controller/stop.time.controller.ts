@@ -1,40 +1,36 @@
 import { currentUser, requireAuth } from "@prnv404/bus3";
 import express, { Request, Response } from "express";
 import { container } from "tsyringe";
-import { CalendarService } from "../service/calender.service";
-import { ICalendar } from "../database/mongo/models/calender.model";
+import { StopTimeService } from "../service/stop.time.service";
+import { StopsTimeInterFace } from "../database/mongo/models/stops.time.model";
+import { PUT_TO_ELASTIC } from "../database/elasticsearch/elasticsearch.repository";
 
 const router = express.Router();
 
-const Service = container.resolve(CalendarService);
+const Service = container.resolve(StopTimeService);
 
-router.post("/calender", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const data = req.body as ICalendar;
-	const result = await Service.createCalendar(data);
+router.post("/stoptime", currentUser, requireAuth, async (req: Request, res: Response) => {
+	const data = req.body as StopsTimeInterFace;
+	const result = await Service.createStoptime(data);
+	await PUT_TO_ELASTIC("stoptime", result);
 	res.status(201).json({ result });
 });
 
-router.get("/calender/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
+router.get("/stoptime/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
 	const id = req.params.id as string;
-	const result = await Service.getCalendarById(id);
+	const result = await Service.findByid(id);
 	res.status(200).json({ result });
 });
 
-router.get("/calender/service/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
+router.put("/stoptime/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
 	const id = req.params.id as string;
-	const result = await Service.getCalendarByServiceId(id);
+	const data = req.body as StopsTimeInterFace;
+	const result = await Service.updateStopTime(id, data);
 	res.status(200).json({ result });
 });
 
-router.put("/calender/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
+router.delete("/stoptime/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
 	const id = req.params.id as string;
-	const data = req.body as ICalendar;
-	const result = await Service.updateCalendar(id, data);
-	res.status(200).json({ result });
-});
-
-router.delete("/calender/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const id = req.params.id as string;
-	const result = await Service.deleteCalendar(id);
+	const result = await Service.delete(id);
 	res.status(200).json({ result });
 });

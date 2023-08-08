@@ -8,6 +8,9 @@ import { errorHandler, NotFoundError } from "@prnv404/bus3";
 import { PvtOperatorRouter } from "./lib/controller/pvt.operator.controllet";
 import { BusRouter } from "./lib/controller/bus.controller";
 import { TicketRouter } from "./lib/controller/ticket.controller";
+import { StopRouter } from "./lib/controller/stop.controller";
+import { TripRouter } from "./lib/controller/trip.controller";
+import { RouteRouter } from "./lib/controller/router.controller";
 
 const app = express();
 
@@ -24,6 +27,12 @@ app.use("/api/pvt", PvtOperatorRouter);
 app.use("/api/pvt/bus", BusRouter);
 
 app.use("/api/pvt/ticket", TicketRouter);
+
+app.use("/api/pvt/stop", StopRouter);
+
+app.use("/api/pvt/trip", TripRouter);
+
+app.use("/api/pvt/route", RouteRouter);
 
 app.all("*", async (req: Request, res: Response) => {
 	throw new NotFoundError();

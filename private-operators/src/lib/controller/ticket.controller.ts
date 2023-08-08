@@ -9,9 +9,7 @@ const Service = container.resolve(TicketService);
 
 router.get("/all", currentUser, requireAuth, async (req: Request, res: Response) => {
 	const operatorId = req.currentUser?.id!;
-	console.log(operatorId);
 	const result = await Service.findAll(operatorId);
-
 	return res.status(200).json({ count: result.length, result });
 });
 

@@ -4,6 +4,7 @@ import { BusAttrs } from "../database/mongo/models/bus.model";
 import { container } from "tsyringe";
 import { BusService } from "../service/bus.service";
 import { EditBusValidation, busValidation } from "./validator/validator";
+import { PUT_TO_ELASTIC } from "../database/elasticsearch/elasticsearch.repository";
 
 const router = express.Router();
 
@@ -15,6 +16,8 @@ router.post("/", sanitizeData, busValidation, validateRequest, currentUser, requ
 	const OperatorId = req.currentUser?.id!;
 
 	const bus = await Service.Create({ BusNo, OperatorId, seats, type });
+
+	await PUT_TO_ELASTIC("bus", bus);
 
 	res.status(201).json({ bus });
 });
