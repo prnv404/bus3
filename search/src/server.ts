@@ -1,7 +1,7 @@
 import "dotenv/config";
+import "express-async-errors";
 import app from "./app";
 import { connectToMongoDB } from "@prnv404/bus3";
-import { kafka_client } from "./config/kafka.config";
 import { PingElasticSearch } from "./config/elastic.search.config";
 
 (async () => {

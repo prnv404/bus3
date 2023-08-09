@@ -1,5 +1,5 @@
+import { IStop } from "../database/mongo/model/stop.model";
 import { StopRepository } from "../database/mongo/repository/stop.repository";
-import { IStop } from "../database/mongo/models/stop.model";
 import { autoInjectable } from "tsyringe";
 
 @autoInjectable()

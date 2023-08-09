@@ -1,9 +1,9 @@
-import { IStopsTime, StopsTimeModel } from "../models/stops.time.model";
+import { IStopsTime, StopsTimeInterFace, StopsTimeModel } from "../model/stops.time.model";
 
 export class StopsTimeRepository {
 	constructor() {}
 
-	async create(stopTime: IStopsTime): Promise<IStopsTime> {
+	async create(stopTime: StopsTimeInterFace): Promise<IStopsTime> {
 		return StopsTimeModel.create(stopTime);
 	}
 
