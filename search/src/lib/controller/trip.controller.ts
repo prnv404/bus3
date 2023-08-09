@@ -1,9 +1,8 @@
 import { currentUser, requireAuth } from "@prnv404/bus3";
 import express, { Request, Response } from "express";
-import { ITrip } from "../database/mongo/models/trip.model";
 import { container } from "tsyringe";
 import { TripService } from "../service/trip.service";
-import { PUT_TO_ELASTIC } from "../database/elasticsearch/elasticsearch.repository";
+import { ITrip } from "../database/mongo/model/trip.model";
 
 const router = express.Router();
 
@@ -12,8 +11,12 @@ const Service = container.resolve(TripService);
 router.post("/", currentUser, requireAuth, async (req: Request, res: Response) => {
 	const data = req.body as ITrip;
 	const result = await Service.createTrip(data);
-	await PUT_TO_ELASTIC("trip", result);
 	res.status(201).json({ result });
+});
+
+router.get("/all", currentUser, requireAuth, async (req: Request, res: Response) => {
+	const result = await Service.getTrips();
+	res.status(200).json({ result });
 });
 
 router.get("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
@@ -22,7 +25,7 @@ router.get("/:id", currentUser, requireAuth, async (req: Request, res: Response)
 	res.status(200).json({ result });
 });
 
-router.put("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
+router.patch("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
 	const id = req.params.id as string;
 	const data = req.body as ITrip;
 	const result = await Service.updateTrip(id, data);
@@ -31,7 +34,7 @@ router.put("/:id", currentUser, requireAuth, async (req: Request, res: Response)
 
 router.delete("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
 	const id = req.params.id as string;
-	const result = await Service.getTripById(id);
+	const result = await Service.deleteTrip(id);
 	res.status(200).json({ result });
 });
 

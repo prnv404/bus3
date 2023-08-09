@@ -1,6 +1,8 @@
 import { autoInjectable } from "tsyringe";
-import { ITrip } from "../database/mongo/models/trip.model";
 import { TripRepository } from "../database/mongo/repository/trip.repository";
+import { ITrip } from "../database/mongo/model/trip.model";
+import { RouteRepository } from "../database/mongo/repository/route.repository";
+import { BadRequestError } from "@prnv404/bus3";
 
 @autoInjectable()
 export class TripService {
@@ -10,15 +12,22 @@ export class TripService {
 		return this.tripRepository.create(trip);
 	}
 
+	async getTrips() {
+		const result = await this.tripRepository.findAll();
+		return result;
+	}
+
 	async getTripById(id: string): Promise<ITrip | null> {
-		return this.tripRepository.findById(id);
+		const result = await this.tripRepository.findById(id);
+		if (!result) throw new BadRequestError("no trip found");
+		return result;
 	}
 
 	async updateTrip(id: string, updates: Partial<ITrip>): Promise<ITrip | null> {
 		return this.tripRepository.update(id, updates);
 	}
 
-	async deleteTrip(id: string): Promise<void> {
-		await this.tripRepository.delete(id);
+	async deleteTrip(id: string) {
+		return await this.tripRepository.delete(id);
 	}
 }

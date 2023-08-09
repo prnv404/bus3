@@ -4,7 +4,7 @@ export interface IRoute extends Document {
 	route_id: string;
 	route_short_name: string;
 	route_long_name: string;
-	route_type: number;
+	route_type: string;
 }
 
 const RouteSchema = new Schema<IRoute>({
@@ -21,7 +21,7 @@ const RouteSchema = new Schema<IRoute>({
 		required: true
 	},
 	route_type: {
-		type: Number,
+		type: String,
 		required: true
 	}
 });
