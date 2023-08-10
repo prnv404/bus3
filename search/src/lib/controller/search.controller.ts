@@ -19,4 +19,12 @@ router.get("/stoptime", currentUser, requireAuth, async (req: Request, res: Resp
 	res.json(stopTimes);
 });
 
+router.get("/route", currentUser, requireAuth, async (req: Request, res: Response) => {
+	const routename = req.query.route as string;
+	console.log("hello");
+	const trips = await Service.GetTripByRouteName(routename);
+
+	res.json({ trips });
+});
+
 export { router as SearchRouter };

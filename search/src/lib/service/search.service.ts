@@ -20,4 +20,11 @@ export class SearchService {
 		const stopTime = await this.repository.findStoptimeOfTrip(tripId);
 		return stopTime;
 	}
+
+	public async GetTripByRouteName(routename: string) {
+		const routeId = await this.repository.routeByname(routename);
+		if (!routeId) throw new BadRequestError("NO route found");
+		const trips = await this.repository.findTripByRoute(routeId.route_id);
+		return trips;
+	}
 }

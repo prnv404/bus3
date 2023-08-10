@@ -1,3 +1,4 @@
+import { RouteModel } from "../model/route.model";
 import { IStop, StopModel } from "../model/stop.model";
 import { StopsTimeModel } from "../model/stops.time.model";
 import { TripModel } from "../model/trip.model";
@@ -31,5 +32,29 @@ export class SearchRepository {
 		}).sort({ stop_sequence: 1 });
 
 		return stopTime;
+	}
+
+	public async findTripByRoute(routeId: string) {
+		const trips = await TripModel.find({
+			route_id: { $in: [routeId] }
+		});
+		return trips;
+	}
+
+	public async routeByname(routename: string) {
+		const routeId = await RouteModel.findOne({
+			$or: [
+				{
+					route_long_name: routename
+				},
+				{
+					route_short_name: routename
+				},
+				{
+					route_id: routename
+				}
+			]
+		});
+		return routeId;
 	}
 }

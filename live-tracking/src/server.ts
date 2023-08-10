@@ -11,6 +11,7 @@ const start = async () => {
 	const MQTT_TOPIC = "/hfp/v2/journey/+/vp/bus/#";
 
 	await mqttService.connect("bus3-listeners");
+
 	await hlsMqttService.connect(MQTT_BROKER, MQTT_PORT, "mqtts");
 
 	// await hlsMqttService.subscribe(MQTT_TOPIC);
