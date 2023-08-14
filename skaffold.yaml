@@ -64,3 +64,19 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: prnv404/bus-pass
+      context: bus-pass
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: prnv404/payment
+      context: payment
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .

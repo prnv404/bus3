@@ -45,3 +45,17 @@ spec:
                 name: search-srv
                 port:
                   number: 3000  
+         - path: /api/buspass?(.*)
+           pathType: Prefix
+           backend:
+              service:
+                name: search-srv
+                port:
+                  number: 3000  
+         - path: /api/payment?(.*)
+           pathType: Prefix
+           backend:
+              service:
+                name: search-srv
+                port:
+                  number: 3000  

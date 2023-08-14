@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bus-pass-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bus-pass
+  template:
+    metadata:
+      labels:
+        app: bus-pass
+    spec:
+      containers:
+        - name: bus-pass
+          image: prnv404/bus-pass
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bus-pass-srv
+spec:
+  selector:
+    app: bus-pass
+  ports:
+    - name: bus-pass
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
