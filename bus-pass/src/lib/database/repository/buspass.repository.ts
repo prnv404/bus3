@@ -26,26 +26,16 @@ export class BusPassRepository {
 	}
 
 	async PassTransaction(id: string, ticketPrice: number) {
-		const session = await mongoose.startSession();
-		session.startTransaction();
-		const option = { session };
 		try {
 			const busPass = await BuspassModel.findById(id);
-			if (!busPass) {
-				return 404;
-			}
-			if (busPass.balance < ticketPrice) {
-				return 400;
-			}
+			if (busPass?.isActive == false) return 400;
+			if (!busPass) return 404;
+			if (busPass.balance < ticketPrice) return 401;
 			const newBalance = busPass.balance - ticketPrice;
-			await BuspassModel.findByIdAndUpdate(busPass._id, { balance: newBalance }, option);
-			await session.commitTransaction();
-			session.endSession();
+			await BuspassModel.findByIdAndUpdate(busPass._id, { balance: newBalance });
 			return 200;
 		} catch (error) {
 			console.error("Error during transaction:", error);
-			await session.abortTransaction();
-			session.endSession();
 		}
 	}
 }

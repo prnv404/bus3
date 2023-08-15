@@ -28,4 +28,10 @@ router.get("/balance/:id", currentUser, requireAuth, async (req: Request, res: R
 	res.json({ balance });
 });
 
+router.post("/balance", currentUser, requireAuth, async (req: Request, res: Response) => {
+	const { id, price } = req.body;
+	const balance = await Service.AddBalance(id, price);
+	res.json({ balance });
+});
+
 export { router as BussPassRouter };

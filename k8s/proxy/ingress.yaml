@@ -49,13 +49,13 @@ spec:
            pathType: Prefix
            backend:
               service:
-                name: search-srv
+                name: bus-pass-srv
                 port:
                   number: 3000  
          - path: /api/payment?(.*)
            pathType: Prefix
            backend:
               service:
-                name: search-srv
+                name: payment-srv
                 port:
                   number: 3000  

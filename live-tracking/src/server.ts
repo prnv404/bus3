@@ -12,15 +12,24 @@ const start = async () => {
 
 	await mqttService.connect("bus3-listeners");
 
-	await hlsMqttService.connect(MQTT_BROKER, MQTT_PORT, "mqtts");
+	await mqttService.subscribe("/res/buspass/bus1");
 
-	// await hlsMqttService.subscribe(MQTT_TOPIC);
+	// setInterval(async () => {
+	// 	await mqttService.publish("/req/buspass/bus1", {
+	// 		id: "64d9fbadfe8d512a2ea6b7b6",
+	// 		price: 60
+	// 	});
+	// }, 2000);
 
-	await hlsMqttService.onMessage(async (topic, data) => {
-		await mqttService.publish(topic, JSON.stringify(data));
-	});
+	// await hlsMqttService.connect(MQTT_BROKER, MQTT_PORT, "mqtts");
 
-	await mqttService.subscribe("/hfp/v2/journey/+/vp/bus/#");
+	// // await hlsMqttService.subscribe(MQTT_TOPIC);
+
+	// await hlsMqttService.onMessage(async (topic, data) => {
+	// 	await mqttService.publish(topic, JSON.stringify(data));
+	// });
+
+	// await mqttService.subscribe("/hfp/v2/journey/+/vp/bus/#");
 
 	await mqttService.onMessage((topic, data) => {
 		console.log(`Message Received from ${topic} data ${data}`);

@@ -25,18 +25,25 @@ export class BusPassService {
 		if (busPass) {
 			return {
 				balance: busPass.balance,
-				passengerId: busPass.passengerId,
-				endDate: busPass.endDate
+				passengerId: busPass.passengerId
 			};
 		}
 		throw new BadRequestError("Something went wrong");
 	}
 
+	public async AddBalance(id: string, price: number) {
+		const buspass = await this.findById(id);
+		buspass.balance += price;
+		await buspass.save();
+		return buspass;
+	}
+
 	public async BusPassTransaction(id: string, price: number, topic: string) {
 		const transaction = await this.repository.PassTransaction(id, price);
-		topic = `/res/buspass/${topic.split("/")[2]}`;
+		topic = `/res/buspass/${topic.split("/")[3]}`;
 		if (transaction === 404) return { message: "no bus pass found", topic };
-		if (transaction === 400) return { message: "insufficient balance to procced transaction", topic };
+		if (transaction === 401) return { message: "insufficient balance to procced transaction", topic };
+		if (transaction === 400) return { message: "bus pass is not active", topic };
 		if (transaction === 200) return { message: "transaction successfull", topic };
 	}
 }
