@@ -2,6 +2,8 @@ import { autoInjectable } from "tsyringe";
 import { BusPassRepository } from "../database/repository/buspass.repository";
 import { IBusPass } from "../database/model/buspass.model";
 import { BadRequestError } from "@prnv404/bus3";
+import { kafka_client } from "../../config/kafka.config";
+import { PUBLISH_TICKET_CREATED } from "../../events/publisher/ticket.pass.created.publisher";
 
 @autoInjectable()
 export class BusPassService {
@@ -38,12 +40,24 @@ export class BusPassService {
 		return buspass;
 	}
 
-	public async BusPassTransaction(id: string, price: number, topic: string) {
+	public async BusPassTransaction(data: { topic: string; id: string; userId: string; from: string; to: string; price: number }) {
+		let { from, id, price, to, topic, userId } = data;
 		const transaction = await this.repository.PassTransaction(id, price);
 		topic = `/res/buspass/${topic.split("/")[3]}`;
 		if (transaction === 404) return { message: "no bus pass found", topic };
 		if (transaction === 401) return { message: "insufficient balance to procced transaction", topic };
 		if (transaction === 400) return { message: "bus pass is not active", topic };
-		if (transaction === 200) return { message: "transaction successfull", topic };
+		if (transaction?.code === 200) {
+			await new PUBLISH_TICKET_CREATED(kafka_client).publish({
+				from,
+				price,
+				to,
+				userId: transaction.userId
+			});
+			return {
+				message: "transaction successfull",
+				topic
+			};
+		}
 	}
 }

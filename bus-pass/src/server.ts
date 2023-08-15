@@ -17,7 +17,7 @@ import { Service } from "./lib/controller/buspass.controller";
 		await mqtt.subscribe("/req/buspass/#");
 
 		mqtt.onMessage(async (topic, data: any) => {
-			const response = await Service.BusPassTransaction(data.id, data.price, topic);
+			const response = await Service.BusPassTransaction({ topic, ...data });
 			await mqtt.publish(response?.topic!, response?.message);
 		});
 

@@ -3,6 +3,8 @@ import express, { Request, Response } from "express";
 import { IBusPass } from "../database/model/buspass.model";
 import { container } from "tsyringe";
 import { BusPassService } from "../service/buspass.service";
+import { PUBLISH_BUSSPASS_CREATED } from "../../events/publisher/pass.created.publiser";
+import { kafka_client } from "../../config/kafka.config";
 
 const router = express.Router();
 
@@ -13,6 +15,10 @@ router.post("/", currentUser, requireAuth, async (req: Request, res: Response) =
 	data.isActive = false;
 	data.passengerId = req.currentUser?.id!;
 	const busPass = await Service.CreateBusPass(data);
+	await new PUBLISH_BUSSPASS_CREATED(kafka_client).publish({
+		busPassId: busPass.id,
+		userId: data.passengerId
+	});
 	res.status(201).json({ message: "Bus pass created succesfully make the payment for further use ", result: busPass });
 });
 

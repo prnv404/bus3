@@ -14,12 +14,14 @@ const start = async () => {
 
 	await mqttService.subscribe("/res/buspass/bus1");
 
-	// setInterval(async () => {
-	// 	await mqttService.publish("/req/buspass/bus1", {
-	// 		id: "64d9fbadfe8d512a2ea6b7b6",
-	// 		price: 60
-	// 	});
-	// }, 2000);
+	setInterval(async () => {
+		await mqttService.publish("/req/buspass/bus1", {
+			id: "64db0053e9e2ce2aedb0249e",
+			price: 10,
+			to: "koci",
+			from: "alappey"
+		});
+	}, 10000);
 
 	// await hlsMqttService.connect(MQTT_BROKER, MQTT_PORT, "mqtts");
 

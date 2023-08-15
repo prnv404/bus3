@@ -33,7 +33,10 @@ export class BusPassRepository {
 			if (busPass.balance < ticketPrice) return 401;
 			const newBalance = busPass.balance - ticketPrice;
 			await BuspassModel.findByIdAndUpdate(busPass._id, { balance: newBalance });
-			return 200;
+			return {
+				code: 200,
+				userId: busPass.passengerId
+			};
 		} catch (error) {
 			console.error("Error during transaction:", error);
 		}
