@@ -27,7 +27,7 @@ export interface PassengertAttrs {
 
 	busPassId: string; //
 
-	purchasedTickets: string[]; //
+	purchasedTickets: any[]; //
 
 	currentTickets: string[]; //
 }
@@ -63,7 +63,7 @@ export interface PassengerDoc extends mongoose.Document {
 
 	busPassId: string;
 
-	purchasedTickets: string[];
+	purchasedTickets: any[];
 
 	currentTickets: string[];
 }
@@ -128,11 +128,7 @@ const PassengerSchema = new mongoose.Schema(
 				type: Schema.Types.ObjectId
 			}
 		],
-		purchasedTickets: [
-			{
-				type: Schema.Types.ObjectId
-			}
-		],
+		purchasedTickets: [],
 		currentTickets: [
 			{
 				type: Schema.Types.ObjectId

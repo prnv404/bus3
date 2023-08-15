@@ -2,6 +2,7 @@ import { BadRequestError } from "@prnv404/bus3";
 import { PassengerRepository } from "../database/mongo/repository/passenger.repository";
 import { PassengertAttrs } from "../database/mongo/model/passenger.model";
 import { autoInjectable } from "tsyringe";
+import { TICKET_PASS_CREATED } from "../../events/listener/ticket.created.buspass.listener";
 
 @autoInjectable()
 export class PassengerService {
@@ -50,5 +51,24 @@ export class PassengerService {
 		console.log(passenger.favSchedule);
 		await passenger.save();
 		return passenger;
+	}
+
+	async addBusPassId(id: string, buspassId: string) {
+		const passenger = await this.GetProfie(id);
+		passenger.busPassId = buspassId;
+		await passenger.save();
+		return passenger;
+	}
+
+	async addTickets(data: TICKET_PASS_CREATED["data"]) {
+		try {
+			console.log(data);
+			const passenger = await this.GetProfie(data.userId);
+			passenger.purchasedTickets.push(data);
+			await passenger.save();
+			return passenger;
+		} catch (error) {
+			console.log(error);
+		}
 	}
 }
