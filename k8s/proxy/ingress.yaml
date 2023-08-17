@@ -52,10 +52,10 @@ spec:
                 name: bus-pass-srv
                 port:
                   number: 3000  
-         - path: /api/payment?(.*)
+         - path: /api/order?(.*)
            pathType: Prefix
            backend:
               service:
-                name: payment-srv
+                name: order-srv
                 port:
                   number: 3000  

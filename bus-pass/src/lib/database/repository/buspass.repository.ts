@@ -28,9 +28,22 @@ export class BusPassRepository {
 	async PassTransaction(id: string, ticketPrice: number) {
 		try {
 			const busPass = await BuspassModel.findById(id);
-			if (busPass?.isActive == false) return 400;
-			if (!busPass) return 404;
-			if (busPass.balance < ticketPrice) return 401;
+			console.log(busPass);
+			if (busPass?.isActive == false) {
+				return {
+					code: 200
+				};
+			}
+			if (!busPass) {
+				return {
+					code: 404
+				};
+			}
+			if (busPass.balance < ticketPrice) {
+				return {
+					code: 401
+				};
+			}
 			const newBalance = busPass.balance - ticketPrice;
 			await BuspassModel.findByIdAndUpdate(busPass._id, { balance: newBalance });
 			return {

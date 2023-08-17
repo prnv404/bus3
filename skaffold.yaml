@@ -72,11 +72,13 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: prnv404/payment
-      context: payment
+    - image: prnv404/order
+      context: order
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
           - src: 'src/**/*.ts'
+            dest: .
+          - src: 'views/*.ejs'
             dest: .

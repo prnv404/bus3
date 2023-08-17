@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: payment-depl
+  name: order-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: payment
+      app: order
   template:
     metadata:
       labels:
-        app: payment
+        app: order
     spec:
       containers:
-        - name: payment
-          image: prnv404/payment
+        - name: order
+          image: prnv404/order
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: payment-srv
+  name: order-srv
 spec:
   selector:
-    app: payment
+    app: order
   ports:
-    - name: payment
+    - name: order
       protocol: TCP
       port: 3000
       targetPort: 3000

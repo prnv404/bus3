@@ -14,14 +14,18 @@ const start = async () => {
 
 	await mqttService.subscribe("/res/buspass/bus1");
 
-	setInterval(async () => {
-		await mqttService.publish("/req/buspass/bus1", {
-			id: "64db0053e9e2ce2aedb0249e",
-			price: 10,
-			to: "koci",
-			from: "alappey"
-		});
-	}, 10000);
+	// setInterval(async () => {
+	// 	await mqttService.publish("/req/buspass/bus1", {
+	// 		id: "64dc690ec6a757955a8b9806",
+	// 		price: 10,
+	// 		to: "kochi",
+	// 		from: "alappey",
+	// 		busNo: "BUS10",
+	// 		OperatorId: "64be18d982af82bedad661af",
+	// 		route: "ALP-AMB",
+	// 		srt: true
+	// 	});
+	// }, 10000);
 
 	// await hlsMqttService.connect(MQTT_BROKER, MQTT_PORT, "mqtts");
 

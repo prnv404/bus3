@@ -5,6 +5,8 @@ import { container } from "tsyringe";
 import { BusPassService } from "../service/buspass.service";
 import { PUBLISH_BUSSPASS_CREATED } from "../../events/publisher/pass.created.publiser";
 import { kafka_client } from "../../config/kafka.config";
+import { PUBLISH_PASS_ORDER } from "../../events/publisher/pass.order.created.publisher";
+import { v4 as uuidv4 } from "uuid";
 
 const router = express.Router();
 
@@ -15,11 +17,22 @@ router.post("/", currentUser, requireAuth, async (req: Request, res: Response) =
 	data.isActive = false;
 	data.passengerId = req.currentUser?.id!;
 	const busPass = await Service.CreateBusPass(data);
+
 	await new PUBLISH_BUSSPASS_CREATED(kafka_client).publish({
 		busPassId: busPass.id,
 		userId: data.passengerId
 	});
-	res.status(201).json({ message: "Bus pass created succesfully make the payment for further use ", result: busPass });
+
+	const paymentId = uuidv4();
+
+	await new PUBLISH_PASS_ORDER(kafka_client).publish({
+		userId: busPass.passengerId,
+		busPassId: busPass.id,
+		amount: data.balance,
+		paymentId,
+		addBalance: false
+	});
+	res.status(201).json({ message: "Procceed with payment ", paymentId, busPass });
 });
 
 router.get("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
@@ -35,9 +48,17 @@ router.get("/balance/:id", currentUser, requireAuth, async (req: Request, res: R
 });
 
 router.post("/balance", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const { id, price } = req.body;
-	const balance = await Service.AddBalance(id, price);
-	res.json({ balance });
+	const { id, balance } = req.body;
+	const busPass = await Service.findById(id);
+	const paymentId = uuidv4();
+	await new PUBLISH_PASS_ORDER(kafka_client).publish({
+		userId: busPass.passengerId,
+		busPassId: busPass.id,
+		amount: balance,
+		paymentId,
+		addBalance: true
+	});
+	res.json({ message: "PROCCED WITH YOUR TRANSACTION", paymentId });
 });
 
 export { router as BussPassRouter };
