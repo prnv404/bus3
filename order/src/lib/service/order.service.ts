@@ -2,6 +2,7 @@ import { autoInjectable } from "tsyringe";
 import { OrderRepository } from "../database/repository/order.repository";
 import { Iorder } from "../database/model/order.model";
 import { ISuccessRazorpay } from "../controller/order.controller";
+import { timeStamp } from "console";
 
 @autoInjectable()
 export class OrderService {
@@ -36,5 +37,9 @@ export class OrderService {
 			await order.save();
 			return order;
 		}
+	}
+
+	async GetReports() {
+		return await this.repository.GetReports();
 	}
 }

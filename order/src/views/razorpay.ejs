@@ -12,20 +12,20 @@
 	</head>
 	<body>
 		<div class="container p-5 d-flex justify-content-center">
-			<button class="btn btn-success w-100" onclick="pay()">PAY</button>
+			<button class="btn btn-success w-50" onclick="pay()">PAY</button>
 		</div>
 
 		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 		<script>
 			function pay() {
 				var options = {
-					key: "rzp_test_5yu10zqm98fSTU", // Enter the Key ID generated from the Dashboard
-					amount: "<%= amount %>", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+					key: "rzp_test_5yu10zqm98fSTU",
+					amount: "<%= amount %>",
 					currency: "INR",
 					name: "bus3", //your business name
 					description: "Test Transaction",
 					image: "",
-					order_id: "<%= order_id %>", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+					order_id: "<%= order_id %>",
 					handler: function (response) {
 						console.log(response);
 						// alert(response.razorpay_payment_id);
@@ -34,7 +34,7 @@
 						verifyPayment(response);
 					},
 					prefill: {
-						name: "Gaurav Kumar", //your customer's name
+						name: "Gaurav Kumar",
 						email: "gaurav.kumar@example.com",
 						contact: "9000090000"
 					},

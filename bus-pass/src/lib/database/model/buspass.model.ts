@@ -21,13 +21,33 @@ interface IBuspassDoc {
 }
 
 const BuspassSchema: Schema = new Schema({
-	passengerId: { type: String, required: true },
-	passengerName: { type: String, required: true },
-	type: { type: String, enum: ["student", "regular"], required: true },
-	isActive: { type: Boolean, required: true },
-	startStop: { type: String },
-	endStop: { type: String },
-	balance: { type: Number, required: true }
+	passengerId: {
+		type: String,
+		required: true
+	},
+	passengerName: {
+		type: String,
+		required: true
+	},
+	type: {
+		type: String,
+		enum: ["student", "regular"],
+		required: true
+	},
+	isActive: {
+		type: Boolean,
+		required: true
+	},
+	startStop: {
+		type: String
+	},
+	endStop: {
+		type: String
+	},
+	balance: {
+		type: Number,
+		required: true
+	}
 });
 
 const BuspassModel = mongoose.model<IBuspassDoc>("Buspass", BuspassSchema);

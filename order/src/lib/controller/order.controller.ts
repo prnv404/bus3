@@ -40,13 +40,13 @@ router.post("/pay-verify", async (req: Request, res: Response) => {
 	res.status(200);
 });
 
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/payment/:id", async (req: Request, res: Response) => {
 	const paymentId = req.params.id as string;
 
 	const order = await Service.findOrderById(paymentId);
 
 	const options = {
-		amount: order?.amount! * 1000,
+		amount: order?.amount! * 100,
 		currency: "INR",
 		receipt: paymentId,
 		payment_capture: 1
@@ -75,12 +75,24 @@ router.get("/capture", async (req: Request, res: Response) => {
 	}
 });
 
+router.get("/report", currentUser, requireAuth, async (req: Request, res: Response) => {
+	const report = await Service.GetReports();
+	res.json({ report });
+});
 router.get("/", currentUser, requireAuth, async (req: Request, res: Response) => {
 	const id = req.currentUser?.id as string;
 
 	const orders = await Service.findByPassenger(id);
 
 	res.json({ orders });
+});
+
+router.get("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
+	const orderId = req.params.id as string;
+
+	const order = await Service.findById(orderId);
+
+	res.json({ order });
 });
 
 export { router as OrderRouter };

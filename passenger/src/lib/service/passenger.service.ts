@@ -62,7 +62,6 @@ export class PassengerService {
 
 	async addTickets(data: TICKET_PASS_CREATED["data"]) {
 		try {
-			console.log(data);
 			const passenger = await this.GetProfie(data.userId);
 			passenger.purchasedTickets.push(data);
 			await passenger.save();
@@ -70,5 +69,9 @@ export class PassengerService {
 		} catch (error) {
 			console.log(error);
 		}
+	}
+
+	async GetReports() {
+		return await this.passengerRepository.GetReport();
 	}
 }

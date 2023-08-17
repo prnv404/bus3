@@ -18,6 +18,15 @@ export class BusPassService {
 		return busPass;
 	}
 
+	public async findByPassengerId(id: string) {
+		const busPass = await this.repository.findByPassengerId(id);
+		return busPass;
+	}
+
+	public async GetAnalyticReport() {
+		return this.repository.GetAnalyticsReports();
+	}
+
 	public async findById(id: string) {
 		const buspass = await this.repository.findById(id);
 		if (!buspass) throw new BadRequestError("No Bus pass found");
@@ -54,7 +63,7 @@ export class BusPassService {
 		busNo: string;
 		route: string;
 	}) {
-		console.log(data);
+		// console.log(data);
 		let { from, id, price, to, topic, srt, OperatorId, busNo, route } = data;
 		const transaction = await this.repository.PassTransaction(id, price);
 		topic = `/res/buspass/${topic.split("/")[3]}`;

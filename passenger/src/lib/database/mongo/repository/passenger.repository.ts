@@ -39,4 +39,27 @@ export class PassengerRepository {
 
 		return passenger;
 	}
+
+	async GetReport() {
+		const TotalpassengerCount = await PASSENGER.countDocuments();
+
+		console.log(TotalpassengerCount);
+
+		const TotalStudents = await PASSENGER.countDocuments({ type: "student" });
+
+		const TotalRegularPassengers = await PASSENGER.countDocuments({ type: "regular" });
+
+		const TotalPassengersHasBusPass = await PASSENGER.countDocuments({
+			busPassId: {
+				$exists: true
+			}
+		});
+
+		return {
+			TotalpassengerCount,
+			TotalStudents,
+			TotalRegularPassengers,
+			TotalPassengersHasBusPass
+		};
+	}
 }

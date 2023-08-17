@@ -52,4 +52,9 @@ router.post("/route", routeValidation, validateRequest, sanitizeData, currentUse
 	res.status(200).json({ passenger });
 });
 
+router.get("/report", currentUser, requireAuth, async (req: Request, res: Response) => {
+	const reports = await Service.GetReports();
+	res.status(200).json({ reports });
+});
+
 export { router as PassengerRouter };

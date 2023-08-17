@@ -35,9 +35,9 @@ router.post("/", currentUser, requireAuth, async (req: Request, res: Response) =
 	res.status(201).json({ message: "Procceed with payment ", paymentId, busPass });
 });
 
-router.get("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const id = req.params.id as string;
-	const busPass = await Service.findById(id);
+router.get("/", currentUser, requireAuth, async (req: Request, res: Response) => {
+	const passengerId = req.currentUser?.id!;
+	const busPass = await Service.findByPassengerId(passengerId);
 	res.json({ busPass });
 });
 
@@ -59,6 +59,11 @@ router.post("/balance", currentUser, requireAuth, async (req: Request, res: Resp
 		addBalance: true
 	});
 	res.json({ message: "PROCCED WITH YOUR TRANSACTION", paymentId });
+});
+
+router.get("/report", currentUser, requireAuth, async (req: Request, res: Response) => {
+	const report = await Service.GetAnalyticReport();
+	res.json({ report });
 });
 
 export { router as BussPassRouter };

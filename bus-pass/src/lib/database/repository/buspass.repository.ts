@@ -28,7 +28,7 @@ export class BusPassRepository {
 	async PassTransaction(id: string, ticketPrice: number) {
 		try {
 			const busPass = await BuspassModel.findById(id);
-			console.log(busPass);
+			// console.log(busPass);
 			if (busPass?.isActive == false) {
 				return {
 					code: 200
@@ -53,5 +53,42 @@ export class BusPassRepository {
 		} catch (error) {
 			console.error("Error during transaction:", error);
 		}
+	}
+
+	public async GetAnalyticsReports() {
+		const totalBusPass = await BuspassModel.countDocuments({});
+
+		const totalActivePass = await BuspassModel.countDocuments({
+			isActive: true
+		});
+
+		const totalActiveStudentPass = await BuspassModel.countDocuments({
+			type: "student",
+			isActive: true
+		});
+
+		const inActiveBusPass = await BuspassModel.countDocuments({ isActive: false });
+
+		const totalStudentPasses = await BuspassModel.countDocuments({ type: "student" });
+
+		const totalRegularPasses = await BuspassModel.countDocuments({ type: "regular" });
+
+		const averageBalance = await BuspassModel.aggregate([{ $group: { _id: null, averageBalance: { $avg: "$balance" } } }]);
+
+		const totalBalance = await BuspassModel.aggregate([{ $group: { _id: null, totalBalance: { $sum: "$balance" } } }]);
+
+		const lowBalancePasses = await BuspassModel.countDocuments({ balance: { $lt: 10 } });
+
+		return {
+			totalBusPass,
+			totalActivePass,
+			inActiveBusPass,
+			totalRegularPasses,
+			totalStudentPasses,
+			totalActiveStudentPass,
+			averageBalance,
+			totalBalance,
+			lowBalancePasses
+		};
 	}
 }

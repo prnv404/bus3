@@ -6,7 +6,7 @@ export class OrderRepository {
 		return order;
 	}
 	async findOrderByPassengerId(id: string) {
-		const order = await OrderModel.findOne({ passengerId: id });
+		const order = await OrderModel.find({ passengerId: id });
 		return order;
 	}
 	async findOrderBydId(id: string) {
@@ -21,5 +21,43 @@ export class OrderRepository {
 	async findOrderByOrderId(id: string) {
 		const order = await OrderModel.findOne({ orderId: id });
 		return order;
+	}
+
+	async GetReports() {
+		const totalOrders = await OrderModel.countDocuments();
+
+		const totalRevenueEarned = await OrderModel.aggregate([
+			{
+				$match: {
+					status: "ACCEPTED"
+				}
+			},
+			{
+				$group: {
+					_id: null,
+					totalRevenue: { $sum: "$amount" }
+				}
+			}
+		]);
+
+		const averageOrderAmount = await OrderModel.aggregate([
+			{
+				$match: {
+					status: "ACCEPTED"
+				}
+			},
+			{
+				$group: {
+					_id: null,
+					averageAmount: { $avg: "$amount" }
+				}
+			}
+		]);
+
+		return {
+			totalOrders,
+			totalRevenueEarned,
+			averageOrderAmount
+		};
 	}
 }
