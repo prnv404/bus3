@@ -32,7 +32,7 @@ router.post("/", currentUser, requireAuth, async (req: Request, res: Response) =
 		paymentId,
 		addBalance: false
 	});
-	res.status(201).json({ message: "Procceed with payment ", paymentId, busPass });
+	res.status(201).json({ message: "Procceed with payment to activate your card ", paymentId, busPass });
 });
 
 router.get("/", currentUser, requireAuth, async (req: Request, res: Response) => {
