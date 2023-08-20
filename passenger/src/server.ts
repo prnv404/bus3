@@ -12,7 +12,7 @@ import { TicketCreatedEventListiner } from "./events/listener/ticket.created.bus
 		await new BusPassCreatedEventListener(kafka_client).listen();
 		await new TicketCreatedEventListiner(kafka_client).listen();
 		app.listen(3000, () => {
-			console.log("Server is Listening on port 3000");
+			console.log("Server is Running on port 3000");
 		})
 			.on("error", async () => {})
 			.on("close", async () => {});

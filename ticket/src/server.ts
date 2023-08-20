@@ -22,18 +22,6 @@ const start = async () => {
 	// 		srt: false
 	// 	});
 	// }, 5000);
-
-	// setInterval(async () => {
-	// 	await mqttService.publish("bus/pvt/64be18d982af82bedad661af/ticket", {
-	// 		busNo: "BUS10",
-	// 		from: "ALAPPUZHA",
-	// 		to: "AMBALAPPUZHA",
-	// 		OperatorId: "64be18d982af82bedad661af",
-	// 		price: 15,
-	// 		route: "ALP-AMB",
-	// 		srt: true
-	// 	});
-	// }, 2000);
 };
 
 start();
