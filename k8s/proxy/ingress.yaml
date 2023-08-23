@@ -9,10 +9,11 @@ metadata:
 spec:
   tls:
     - hosts:
+        - bus3.fayizcj.in
         - www.bus3.fayizcj.in
       secretName: bus3-tls
   rules:
-    - host: www.bus3.fayizcj.in
+    - host: bus3.fayizcj.in
       http:
         paths: 
          - path: /api/srt/?(.*)
@@ -70,7 +71,7 @@ kind: Service
 metadata:
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: 'true'
-    service.beta.kubernetes.io/do-loadbalancer-hostname: 'www.bus3.fayizcj.in'
+    service.beta.kubernetes.io/do-loadbalancer-hostname: 'bus3.fayizcj.in'
   labels:
     helm.sh/chart: ingress-nginx-2.0.3
     app.kubernetes.io/name: ingress-nginx
