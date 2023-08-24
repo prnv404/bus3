@@ -5,7 +5,7 @@ export interface TicketAttrs {
 
 	price: number;
 
-	OperatorId: string;
+	operatorId: string;
 
 	route: string;
 
@@ -23,7 +23,7 @@ interface TicketDoc extends mongoose.Document {
 
 	price: number;
 
-	OperatorId: string;
+	operatorId: string;
 
 	route: string;
 
@@ -52,7 +52,7 @@ const TicketSchema = new mongoose.Schema(
 			required: true
 		},
 
-		OperatorId: {
+		operatorId: {
 			type: Schema.Types.ObjectId,
 			required: true
 		},

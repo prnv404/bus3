@@ -1,27 +1,30 @@
 import "reflect-metadata";
 import { BadRequestError } from "@prnv404/bus3";
-import { BusAttrs } from "../database/mongo/models/bus.model";
-import { BusRepository } from "../database/mongo/repository/bus.repository";
 import { autoInjectable } from "tsyringe";
-import { PvtOperatorRepository } from "../database/mongo/repository/pvt.operator.repository";
+import { BusAttrs } from "../../app/database/mongo/models/bus.model";
+import { BusRepository } from "../../app/repository/mongo/bus.repository";
+import { PvtOperatorRepository } from "../../app/repository/mongo/pvt.operator.repository";
+import { Bus, BusDTO } from "../../entites";
 
 @autoInjectable()
-export class BusService {
+export class BusUseCase {
 	constructor(
 		private readonly busRepository: BusRepository,
 		private readonly operatorRepository: PvtOperatorRepository
 	) {}
 
-	async Create(data: BusAttrs) {
-		const busExist = await this.busRepository.findBybusNo(data.BusNo);
+	async Create(data: BusDTO) {
+		const { busNo, operatorId, seats, type } = data;
 
-		const operator = await this.operatorRepository.findbyId(data.OperatorId);
+		const busExist = await this.busRepository.findBybusNo(data.busNo);
+
+		const operator = await this.operatorRepository.findbyId(data.operatorId);
 
 		if (!operator) throw new BadRequestError("No operator Exist !!");
 
 		if (busExist) throw new BadRequestError("Bus Number Already Exist");
 
-		const bus = await this.busRepository.Create(data);
+		const bus = await this.busRepository.Create(new Bus({ busNo, operatorId, seats, type }));
 
 		operator.buses?.push(bus.id);
 

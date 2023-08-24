@@ -1,11 +1,12 @@
 import "reflect-metadata";
 import { BadRequestError, Password } from "@prnv404/bus3";
-import { PvtOperatorAttrs } from "../database/mongo/models/pvt-operator.model";
-import { PvtOperatorRepository } from "../database/mongo/repository/pvt.operator.repository";
 import { autoInjectable } from "tsyringe";
+import { PvtOperatorAttrs } from "../../app/database/mongo/models/pvt-operator.model";
+import { PvtOperatorRepository } from "../../app/repository/mongo/pvt.operator.repository";
+import { PvtOperator } from "../../entites";
 
 @autoInjectable()
-export class PvtOperatorService {
+export class PvtOperatorUseCase {
 	constructor(private readonly pvtRepository: PvtOperatorRepository) {}
 
 	async Signup(data: PvtOperatorAttrs) {
@@ -15,7 +16,9 @@ export class PvtOperatorService {
 
 		data.isVerified = false;
 
-		const operator = await this.pvtRepository.Create(data);
+		const operator = await this.pvtRepository.Create(
+			new PvtOperator(data.name, data.phone, data.district, data.otp, data.isVerified)
+		);
 
 		return operator;
 	}

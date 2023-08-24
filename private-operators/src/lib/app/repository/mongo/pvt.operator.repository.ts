@@ -1,4 +1,4 @@
-import { PvtOperator, PvtOperatorAttrs } from "../models/pvt-operator.model";
+import { PvtOperatorAttrs, PvtOperator } from "../../database/mongo/models/pvt-operator.model";
 
 export class PvtOperatorRepository {
 	constructor() {}

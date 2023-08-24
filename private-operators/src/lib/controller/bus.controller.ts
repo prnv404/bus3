@@ -1,65 +1,63 @@
-import { currentUser, requireAuth, sanitizeData, validateRequest } from "@prnv404/bus3";
-import express, { Request, Response } from "express";
-import { BusAttrs } from "../database/mongo/models/bus.model";
-import { container } from "tsyringe";
-import { BusService } from "../service/bus.service";
-import { EditBusValidation, busValidation } from "./validator/validator";
-import { PUT_TO_ELASTIC } from "../database/elasticsearch/elasticsearch.repository";
+import { Request, Response } from "express";
+import { autoInjectable } from "tsyringe";
+import { BusUseCase } from "../usecase/bus/bus.usecase";
+import { PUT_TO_ELASTIC } from "../app/database/elasticsearch/elasticsearch.repository";
+import { BusAttrs } from "../app/database/mongo/models/bus.model";
+import { BusDTO } from "../entites";
 
-const router = express.Router();
+@autoInjectable()
+export class BusController {
+	constructor(private readonly Service: BusUseCase) {}
 
-const Service = container.resolve(BusService);
+	createBus = async (req: Request, res: Response) => {
+		const { busNo, seats, type } = req.body as BusDTO;
 
-router.post("/", sanitizeData, busValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
-	const { BusNo, seats, type } = req.body as BusAttrs;
+		const operatorId = req.currentUser?.id!;
 
-	const OperatorId = req.currentUser?.id!;
+		const bus = await this.Service.Create({ busNo, operatorId, seats, type });
 
-	const bus = await Service.Create({ BusNo, OperatorId, seats, type });
+		await PUT_TO_ELASTIC("bus", bus);
 
-	await PUT_TO_ELASTIC("bus", bus);
+		res.status(201).json({ bus });
+	};
 
-	res.status(201).json({ bus });
-});
+	updateBus = async (req: Request, res: Response) => {
+		const id = req.params.id;
 
-router.put("/:id", sanitizeData, EditBusValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
-	const id = req.params.id;
+		const { BusNo, operatorId, seats, type } = req.body as BusAttrs;
 
-	const { BusNo, OperatorId, seats, type } = req.body as BusAttrs;
+		const bus = await this.Service.EditBus(id, { BusNo, operatorId, seats, type });
 
-	const bus = await Service.EditBus(id, { BusNo, OperatorId, seats, type });
+		res.status(200).json({ bus });
+	};
 
-	res.status(200).json({ bus });
-});
+	getBusNo = async (req: Request, res: Response) => {
+		const busNo = req.query.busno as string;
 
-router.get("/busno", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const busNo = req.query.busno as string;
+		const bus = await this.Service.findbyName(busNo);
 
-	const bus = await Service.findbyName(busNo);
+		res.status(200).json({ bus });
+	};
 
-	res.status(200).json({ bus });
-});
+	getBusAll = async (req: Request, res: Response) => {
+		const id = req.currentUser?.id!;
 
-router.get("/all", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const id = req.currentUser?.id!;
+		const bus = await this.Service.findAll(id);
 
-	const bus = await Service.findAll(id);
+		res.status(200).json({ bus });
+	};
 
-	res.status(200).json({ bus });
-});
+	getBusById = async (req: Request, res: Response) => {
+		const id = req.params.id;
+		const bus = await this.Service.findById(id);
 
-router.get("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const id = req.params.id;
-	const bus = await Service.findById(id);
+		res.status(200).json({ bus });
+	};
 
-	res.status(200).json({ bus });
-});
+	deleteBus = async (req: Request, res: Response) => {
+		const id = req.params.id;
+		const bus = await this.Service.delete(id);
 
-router.delete("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const id = req.params.id;
-	const bus = await Service.delete(id);
-
-	res.status(200).json({ bus });
-});
-
-export { router as BusRouter };
+		res.status(200).json({ bus });
+	};
+}

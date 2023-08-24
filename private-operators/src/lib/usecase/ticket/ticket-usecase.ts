@@ -1,11 +1,12 @@
 import { autoInjectable } from "tsyringe";
-import { TicketAttrs } from "../database/mongo/models/ticket.model";
-import { TicketRepository } from "../database/mongo/repository/ticket.repository";
-import { PvtOperatorRepository } from "../database/mongo/repository/pvt.operator.repository";
 import { BadRequestError } from "@prnv404/bus3";
+import { TicketAttrs } from "../../app/database/mongo/models/ticket.model";
+import { PvtOperatorRepository } from "../../app/repository/mongo/pvt.operator.repository";
+import { TicketRepository } from "../../app/repository/mongo/ticket.repository";
+import { Ticket } from "../../entites";
 
 @autoInjectable()
-export class TicketService {
+export class TicketUseCase {
 	constructor(
 		private readonly ticketRepsoitory: TicketRepository,
 		private readonly operatorRepository: PvtOperatorRepository
@@ -13,9 +14,11 @@ export class TicketService {
 
 	async Create(data: TicketAttrs) {
 		try {
-			const operator = await this.operatorRepository.findbyId(data.OperatorId);
+			const operator = await this.operatorRepository.findbyId(data.operatorId);
 			if (!operator) throw new Error("No OpeatorFound");
-			const ticket = await this.ticketRepsoitory.Create(data);
+			const ticket = await this.ticketRepsoitory.Create(
+				new Ticket(data.busNo, data.price, data.operatorId, data.route, data.from, data.to)
+			);
 			return ticket;
 		} catch (error) {
 			console.log(error);

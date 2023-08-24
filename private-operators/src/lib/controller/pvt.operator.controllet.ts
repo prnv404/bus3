@@ -1,60 +1,57 @@
-import express, { Request, Response } from "express";
+import { Request, Response } from "express";
+import { autoInjectable } from "tsyringe";
 import jwt from "jsonwebtoken";
-import { OtpValidation, PvtOperatorSigninValidaton } from "./validator/validator";
-import { currentUser, requireAuth, sanitizeData, validateRequest } from "@prnv404/bus3";
-import { PvtOperatorAttrs } from "../database/mongo/models/pvt-operator.model";
-import { PvtOperatorService } from "../service/pvt.operator.service";
 import { SENDOTPNOTIFICATION } from "../../events/publisher/otp.publisher";
 import { kafka_client } from "../../config/kafka.config";
-import { container } from "tsyringe";
+import { PvtOperatorAttrs } from "../app/database/mongo/models/pvt-operator.model";
+import { PvtOperatorUseCase } from "../usecase/private-operator/private-operator.usecase";
 
-const router = express.Router();
+@autoInjectable()
+export class PvtOperatorController {
+	constructor(private readonly Service: PvtOperatorUseCase) {}
 
-const Service = container.resolve(PvtOperatorService);
+	signin = async (req: Request, res: Response) => {
+		const { phone } = req.body as PvtOperatorAttrs;
 
-router.post("/signin", sanitizeData, PvtOperatorSigninValidaton, validateRequest, async (req: Request, res: Response) => {
-	const { phone } = req.body as PvtOperatorAttrs;
+		const otp = String(Math.floor(1000 + Math.random() * 9000));
 
-	const otp = String(Math.floor(1000 + Math.random() * 9000));
+		const operator = await this.Service.Signin(phone, otp);
 
-	const operator = await Service.Signin(phone, otp);
+		await new SENDOTPNOTIFICATION(kafka_client).publish({
+			userId: operator.id,
+			phone: Number(operator.phone),
+			otp,
+			message: "YOUR ONE TIME VERIFICATION CODE IS "
+		});
 
-	await new SENDOTPNOTIFICATION(kafka_client).publish({
-		userId: operator.id,
-		phone: Number(operator.phone),
-		otp,
-		message: "YOUR ONE TIME VERIFICATION CODE IS "
-	});
-
-	res.status(200).send({ message: "otp sended to you phone number" });
-});
-
-router.delete("/signout", currentUser, requireAuth, async (req: Request, res: Response) => {
-	req.session = null;
-
-	res.status(200).send({ message: "Logged Out SuccessFully" });
-});
-
-router.post("/verifyOtp", OtpValidation, validateRequest, async (req: Request, res: Response) => {
-	const { otp, phone } = req.body as PvtOperatorAttrs;
-
-	const operator = await Service.VerifyOtp(otp!, phone);
-
-	const userJwt = jwt.sign({ id: operator.id, phone: operator.phone, isVerified: operator.isVerified }, process.env.JWT_KEY!);
-
-	req.session = {
-		jwt: userJwt
+		res.status(200).send({ message: "otp sent to your phone number" });
 	};
 
-	res.status(200).send({ message: "LogedIn  SuccessFully" });
-});
+	signout = async (req: Request, res: Response) => {
+		req.session = null;
 
-router.get("/profile", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const id = req.currentUser?.id!;
+		res.status(200).send({ message: "Logged Out Successfully" });
+	};
 
-	const operator = await Service.Profile(id);
+	verifyOtp = async (req: Request, res: Response) => {
+		const { otp, phone } = req.body as PvtOperatorAttrs;
 
-	res.status(200).json(operator);
-});
+		const operator = await this.Service.VerifyOtp(otp!, phone);
 
-export { router as PvtOperatorRouter };
+		const userJwt = jwt.sign({ id: operator.id, phone: operator.phone, isVerified: operator.isVerified }, process.env.JWT_KEY!);
+
+		req.session = {
+			jwt: userJwt
+		};
+
+		res.status(200).send({ message: "LoggedIn Successfully" });
+	};
+
+	getProfile = async (req: Request, res: Response) => {
+		const id = req.currentUser?.id!;
+
+		const operator = await this.Service.Profile(id);
+
+		res.status(200).json(operator);
+	};
+}
