@@ -1,17 +1,15 @@
 import mongoose from "mongoose";
+import { BusDTO } from "../../../../entites";
 
 export interface BusAttrs {
 	BusNo: string;
-
 	type: string;
-
-	OperatorId: string;
-
+	operatorId: string;
 	seats: number;
 }
 
 interface BusModel extends mongoose.Model<BusDoc> {
-	build(attrs: BusAttrs): BusDoc;
+	build(attrs: BusDTO): BusDoc;
 }
 
 interface BusDoc extends mongoose.Document {
@@ -19,7 +17,7 @@ interface BusDoc extends mongoose.Document {
 
 	type: string;
 
-	OperatorId: string;
+	operatorId: string;
 
 	seats: number;
 }
@@ -38,7 +36,7 @@ const BusSchema = new mongoose.Schema(
 			required: true
 		},
 
-		OperatorId: {
+		operatorId: {
 			type: String,
 			required: true
 		},

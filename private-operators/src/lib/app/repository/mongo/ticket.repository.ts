@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Ticket, TicketAttrs } from "../models/ticket.model";
+import { TicketAttrs, Ticket } from "../../database/mongo/models/ticket.model";
 
 export class TicketRepository {
 	constructor() {}

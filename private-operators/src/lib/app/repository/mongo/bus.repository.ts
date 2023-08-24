@@ -1,9 +1,10 @@
-import { Bus, BusAttrs } from "../models/bus.model";
+import { BusDTO } from "../../../entites";
+import { BusAttrs, Bus } from "../../database/mongo/models/bus.model";
 
 export class BusRepository {
 	constructor() {}
 
-	async Create(data: BusAttrs) {
+	async Create(data: BusDTO) {
 		const bus = await Bus.build(data).save();
 		return bus;
 	}
