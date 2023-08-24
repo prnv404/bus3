@@ -1,11 +1,10 @@
 name: tests-state-operators
 
 on:
-  push:
+  pull_request:
     branches:
       - master
       - dev
-  pull_request:
     paths:
       - 'state-operators/**'
 
