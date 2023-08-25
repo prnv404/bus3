@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts"
+    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "prettier": "prettier --write ."
   },
   "author": "",
   "license": "ISC",
@@ -28,5 +29,6 @@
     "prettier": "^3.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
+
   }
 }
