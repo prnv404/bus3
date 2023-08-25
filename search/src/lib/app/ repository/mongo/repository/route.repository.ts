@@ -1,13 +1,14 @@
-import { IRoutes } from "../../../controller/router.controller";
-import { IRoute, RouteModel } from "../model/route.model"; // Import the IRoute interface
+import { IRoute } from "express";
+import { IRoutes } from "../../../../controller/router.controller";
+import { RouteModel } from "../../../database/mongo/model/route.model";
 
 export class RouteRepository {
-	async createRoute(routeData: IRoutes): Promise<IRoute> {
+	async createRoute(routeData: IRoutes) {
 		const newRoute = new RouteModel(routeData);
 		return newRoute.save();
 	}
 
-	async getAllRoutes(): Promise<IRoute[]> {
+	async getAllRoutes() {
 		return RouteModel.find().exec();
 	}
 
@@ -15,7 +16,7 @@ export class RouteRepository {
 		return RouteModel.findById(routeId);
 	}
 
-	async updateRouteById(routeId: string, updateData: Partial<IRoute>): Promise<IRoute | null> {
+	async updateRouteById(routeId: string, updateData: IRoute) {
 		return RouteModel.findByIdAndUpdate(routeId, updateData, { new: true }).exec();
 	}
 

@@ -1,11 +1,11 @@
 import { autoInjectable } from "tsyringe";
-import { StopsTimeInterFace } from "../database/mongo/model/stops.time.model";
-import { StopsTimeRepository } from "../database/mongo/repository/stop.time.repository";
-import { SearchRepository } from "../database/mongo/repository/search.repository";
+import { StopsTimeInterFace } from "../../app/database/mongo/model/stops.time.model";
 import { BadRequestError } from "@prnv404/bus3";
+import { SearchRepository } from "../../app/ repository/mongo/repository/search.repository";
+import { StopsTimeRepository } from "../../app/ repository/mongo/repository/stop.time.repository";
 
 @autoInjectable()
-export class StopTimeService {
+export class StopTimeUsecase {
 	constructor(
 		private readonly stopTimeRepsitory: StopsTimeRepository,
 		private readonly searchRepository: SearchRepository

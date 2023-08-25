@@ -1,7 +1,7 @@
-import { RouteModel } from "../model/route.model";
-import { IStop, StopModel } from "../model/stop.model";
-import { StopsTimeModel } from "../model/stops.time.model";
-import { TripModel } from "../model/trip.model";
+import { RouteModel } from "../../../database/mongo/model/route.model";
+import { StopModel, IStop } from "../../../database/mongo/model/stop.model";
+import { StopsTimeModel } from "../../../database/mongo/model/stops.time.model";
+import { TripModel } from "../../../database/mongo/model/trip.model";
 
 export class SearchRepository {
 	constructor() {}

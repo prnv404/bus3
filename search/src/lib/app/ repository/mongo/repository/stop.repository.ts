@@ -1,5 +1,5 @@
 import { Model } from "mongoose";
-import { StopModel, IStop } from "../model/stop.model";
+import { IStop, StopModel } from "../../../database/mongo/model/stop.model";
 
 export class StopRepository {
 	async createStop(stopData: Partial<IStop>): Promise<IStop> {

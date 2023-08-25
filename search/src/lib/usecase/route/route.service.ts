@@ -1,11 +1,11 @@
-import { RouteRepository } from "../database/mongo/repository/route.repository";
 import { injectable } from "tsyringe";
-import { IRoutes } from "../controller/router.controller";
-import { IRoute } from "../database/mongo/model/route.model";
+import { IRoutes } from "../../controller/router.controller";
+import { IRoute } from "../../app/database/mongo/model/route.model";
 import { BadRequestError } from "@prnv404/bus3";
+import { RouteRepository } from "../../app/ repository/mongo/repository/route.repository";
 
 @injectable()
-export class RouterService {
+export class RouterUsecase {
 	private readonly routeRepository: RouteRepository;
 	constructor(routeRepository: RouteRepository) {
 		this.routeRepository = routeRepository;
@@ -20,13 +20,13 @@ export class RouterService {
 		return await this.routeRepository.getAllRoutes();
 	}
 
-	async getRouteById(routeId: string): Promise<IRoutes | null> {
+	async getRouteById(routeId: string) {
 		const result = await this.routeRepository.getRouteById(routeId);
 		if (!result) throw new BadRequestError("No Route found");
 		return result;
 	}
 
-	async updateRouteById(routeId: string, updateData: Partial<IRoutes>): Promise<IRoutes | null> {
+	async updateRouteById(routeId: string, updateData: any) {
 		const updatedRoute = await this.routeRepository.updateRouteById(routeId, updateData);
 		return updatedRoute;
 	}

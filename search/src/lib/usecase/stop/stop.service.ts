@@ -1,9 +1,9 @@
-import { IStop } from "../database/mongo/model/stop.model";
-import { StopRepository } from "../database/mongo/repository/stop.repository";
+import { StopRepository } from "../../app/ repository/mongo/repository/stop.repository";
+import { IStop } from "../../app/database/mongo/model/stop.model";
 import { autoInjectable } from "tsyringe";
 
 @autoInjectable()
-export class StopService {
+export class StopUseCase {
 	constructor(private readonly stopRepository: StopRepository) {}
 
 	async createStop(stopData: Partial<IStop>): Promise<IStop> {

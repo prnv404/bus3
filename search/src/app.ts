@@ -2,12 +2,9 @@ import "reflect-metadata";
 import { NotFoundError, errorHandler } from "@prnv404/bus3";
 import express, { Request, Response } from "express";
 import morgan from "morgan";
-import { SearchRouter } from "./lib/controller/search.controller";
-import { RouteRouter } from "./lib/controller/router.controller";
-import { StopRouter } from "./lib/controller/stop.controller";
-import { TripRouter } from "./lib/controller/trip.controller";
 import cookieSession from "cookie-session";
-import { StopTimeRouter } from "./lib/controller/stop.time.controller";
+import routes from "./routes";
+import { dependency } from "./config/depenency.config";
 
 const app = express();
 
@@ -19,15 +16,7 @@ app.use(cookieSession({ signed: false, secure: false }));
 
 app.use(morgan("dev"));
 
-app.use("/api/search", SearchRouter);
-
-app.use("/api/search/stop", StopRouter);
-
-app.use("/api/search/stoptime", StopTimeRouter);
-
-app.use("/api/search/trip", TripRouter);
-
-app.use("/api/search/route", RouteRouter);
+app.use("/api/search", routes(dependency));
 
 app.all("*", async (req: Request, res: Response) => {
 	throw new NotFoundError();

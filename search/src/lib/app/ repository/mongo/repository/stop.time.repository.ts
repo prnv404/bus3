@@ -1,4 +1,4 @@
-import { IStopsTime, StopsTimeInterFace, StopsTimeModel } from "../model/stops.time.model";
+import { StopsTimeInterFace, IStopsTime, StopsTimeModel } from "../../../database/mongo/model/stops.time.model";
 
 export class StopsTimeRepository {
 	constructor() {}

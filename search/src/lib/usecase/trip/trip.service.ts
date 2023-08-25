@@ -1,11 +1,10 @@
 import { autoInjectable } from "tsyringe";
-import { TripRepository } from "../database/mongo/repository/trip.repository";
-import { ITrip } from "../database/mongo/model/trip.model";
-import { RouteRepository } from "../database/mongo/repository/route.repository";
+import { ITrip } from "../../app/database/mongo/model/trip.model";
 import { BadRequestError } from "@prnv404/bus3";
+import { TripRepository } from "../../app/ repository/mongo/repository/trip.repository";
 
 @autoInjectable()
-export class TripService {
+export class TripUseCase {
 	constructor(private readonly tripRepository: TripRepository) {}
 
 	async createTrip(trip: ITrip): Promise<ITrip> {

@@ -1,4 +1,4 @@
-import { TripModel, ITrip } from "../model/trip.model";
+import { ITrip, TripModel } from "../../../database/mongo/model/trip.model";
 
 export class TripRepository {
 	constructor() {}
