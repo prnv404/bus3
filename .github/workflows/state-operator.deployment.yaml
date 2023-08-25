@@ -8,6 +8,17 @@ on:
       - 'state-operators/**'
 
 jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies and run Prettier
+        run: |
+          cd state-operators
+          npm install
+          npm run prettier
   build:
     runs-on: ubuntu-latest
     steps:

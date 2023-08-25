@@ -11,7 +11,7 @@ import { kafka_client } from "./config/kafka.config";
 		await connectToMongoDB("mongodb://mongo-srv:27017/order");
 		await new BusPassOrderCreatedEvent(kafka_client).listen();
 		app.listen(3000, () => {
-			console.log("Server is Running on port 3000");
+			console.log("Server is Listening on port 3000");
 		})
 			.on("error", async () => {})
 			.on("close", async () => {});

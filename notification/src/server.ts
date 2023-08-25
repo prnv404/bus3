@@ -16,7 +16,7 @@ import { OTPNotificationListener } from "./event/listener/otp.listener";
 		await otpListener.listen();
 
 		app.listen(3000, () => {
-			console.log("Server is Running on port 3000");
+			console.log("Server is Listening on port 3000");
 		})
 			.on("error", async () => {
 				await pushnotificationListener.disconnect();

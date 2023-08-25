@@ -9,7 +9,7 @@ import { PingElasticSearch } from "./config/elastic.search.config";
 		await connectToMongoDB("mongodb://mongo-srv:27017/search");
 		await PingElasticSearch();
 		app.listen(3000, () => {
-			console.log("Server is Running on port 3000");
+			console.log("Server is Listening on port 3000");
 		})
 			.on("error", async () => {})
 			.on("close", async () => {});

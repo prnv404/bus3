@@ -38,7 +38,7 @@ const start = async () => {
 	// await mqttService.subscribe("/hfp/v2/journey/+/vp/bus/#");
 
 	await mqttService.onMessage((topic, data) => {
-		console.log(`Message Got from ${topic} data ${data}`);
+		console.log(`Message Recived from ${topic} data ${data}`);
 	});
 };
 
