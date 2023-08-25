@@ -1,9 +1,9 @@
 import { Kafka, KafkaMessage } from "kafkajs";
 import { KafkaListener, TOPIC, TicketEventSrt } from "@prnv404/bus3";
 import { container } from "tsyringe";
-import { TicketService } from "../../lib/service/ticket.service";
+import { TicketUseCase } from "../../lib/usecase/ticket/ticket.usecase";
 
-const Service = container.resolve(TicketService);
+const Service = container.resolve(TicketUseCase);
 
 export class TicketListener extends KafkaListener<TicketEventSrt> {
 	groupId: string = TOPIC.TICKET_CREATED_SRT;
