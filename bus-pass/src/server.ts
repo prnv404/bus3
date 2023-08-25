@@ -29,7 +29,8 @@ import { ADD_BALANCE_LISTENERS } from "./events/listener/add.balance.listener";
 		});
 
 		app.listen(3000, () => {
-			console.log("Server is Listenting on port 3000");
+
+			console.log("Server is Running on port 3000");
 		})
 			.on("error", async () => {})
 			.on("close", async () => {});
