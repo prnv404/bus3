@@ -18,7 +18,7 @@ import { kafka_client } from "./config/kafka.config";
 		await ticketListener.listen();
 
 		app.listen(3000, () => {
-			console.log("Server is Listening on port 3000");
+			console.log("Server is Running on port 3000");
 		})
 			.on("error", async () => {
 				await ticketListener.disconnect();
