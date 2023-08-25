@@ -16,7 +16,7 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - run: cd order  && npm run prettier && docker build -t prnv404/order .
+      - run: cd order  && docker build -t prnv404/order .
       - run: docker push prnv404/order
       - uses: digitalocean/action-doctl@v2
         with:
