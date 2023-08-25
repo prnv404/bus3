@@ -1,69 +1,65 @@
-import { currentUser, requireAuth, ELASTIC_INDEX, validateRequest, sanitizeData } from "@prnv404/bus3";
-import express, { Request, Response } from "express";
-import { BusAttrs } from "../database/mongo/models/buses.model";
-import { BusService } from "../service/bus.service";
-import { BusRepository } from "../database/mongo/repository/bus.repository";
-import { DepotRepository } from "../database/mongo/repository/depot.repository";
-import { ElasticSearchRepository } from "../database/elasticsearch/repository/elasticsearch.repository";
-import { createBusValidation } from "./validator/validator";
-import { container } from "tsyringe";
-
-const router = express();
-
-const Service = container.resolve(BusService);
+import { ELASTIC_INDEX } from "@prnv404/bus3";
+import { Request, Response } from "express";
+import { BusAttrs } from "../app/database/mongo/models/buses.model";
+import { BusUseCase } from "../usecase/bus/bus.usecase";
+import { ElasticSearchRepository } from "../app/database/elasticsearch/elasticsearch.repository";
+import { autoInjectable } from "tsyringe";
 
 const ElasticService = new ElasticSearchRepository();
 
-router.post("/", sanitizeData, createBusValidation, validateRequest, currentUser, requireAuth, async (req: Request, res: Response) => {
-	let data = req.body as BusAttrs;
+@autoInjectable()
+export class BusController {
+	constructor(private readonly Service: BusUseCase) {}
 
-	const bus = await Service.CreateBus(data);
+	CreateBus = async (req: Request, res: Response) => {
+		let data = req.body as BusAttrs;
 
-	// Add to bus to elastic search
-	const { BusNo, type, depotCode, seats, Operator } = bus;
+		const bus = await this.Service.CreateBus(data);
 
-	await ElasticService.AddDoc(bus.id, ELASTIC_INDEX.BUS, { BusNo, type, depotCode, seats, Operator });
+		// Add to bus to elastic search
+		const { BusNo, type, depotCode, seats, Operator } = bus;
 
-	res.status(201).json(bus);
-});
+		await ElasticService.AddDoc(bus.id, ELASTIC_INDEX.BUS, { BusNo, type, depotCode, seats, Operator });
 
-router.get("/all", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const depotCode = req.query.depotCode as string;
+		res.status(201).json(bus);
+	};
 
-	const buses = await Service.GetAllBus(depotCode);
+	GetAllBus = async (req: Request, res: Response) => {
+		const depotCode = req.query.depotCode as string;
 
-	res.status(200).json(buses);
-});
+		const buses = await this.Service.GetAllBus(depotCode);
 
-router.get("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const id = req.params.id;
+		res.status(200).json(buses);
+	};
 
-	const bus = await Service.GetBus(id);
+	GetBus = async (req: Request, res: Response) => {
+		const id = req.params.id;
 
-	res.status(200).json(bus);
-});
+		const bus = await this.Service.GetBus(id);
 
-router.patch("/edit/:id", sanitizeData, currentUser, requireAuth, async (req: Request, res: Response) => {
-	const id = req.params.id;
+		res.status(200).json(bus);
+	};
 
-	let data = req.body as BusAttrs;
+	EditBus = async (req: Request, res: Response) => {
+		const id = req.params.id;
 
-	const bus = await Service.EditBus(id, data);
+		let data = req.body as BusAttrs;
 
-	// update the bus in elastic search as well
-	const { BusNo, type, depotCode, seats, Operator } = bus;
+		const bus = await this.Service.EditBus(id, data);
 
-	await ElasticService.UpdateDoc(bus.id, ELASTIC_INDEX.BUS, { BusNo, type, depotCode, seats, Operator });
+		// update the bus in elastic search as well
+		const { BusNo, type, depotCode, seats, Operator } = bus;
 
-	res.status(200).json(bus);
-});
+		await ElasticService.UpdateDoc(bus.id, ELASTIC_INDEX.BUS, { BusNo, type, depotCode, seats, Operator });
 
-router.delete("/delete/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const id = req.params.id;
+		res.status(200).json(bus);
+	};
 
-	const bus = await Service.DeleteBus(id);
+	DeleteBus = async (req: Request, res: Response) => {
+		const id = req.params.id;
 
-	res.status(200).json(bus);
-});
+		const bus = await this.Service.DeleteBus(id);
 
-export { router as BusRouter };
+		res.status(200).json(bus);
+	};
+}

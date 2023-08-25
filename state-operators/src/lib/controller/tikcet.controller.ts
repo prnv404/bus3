@@ -1,64 +1,62 @@
 import { currentUser, requireAuth } from "@prnv404/bus3";
 import express, { Request, Response } from "express";
-import { container } from "tsyringe";
-import { TicketService } from "../service/ticket.service";
+import { autoInjectable, container } from "tsyringe";
+import { TicketUseCase } from "../usecase/ticket/ticket.usecase";
 
-const router = express();
+@autoInjectable()
+export class TicketController {
+	constructor(private readonly Service: TicketUseCase) {}
+	FindAll = async (req: Request, res: Response) => {
+		const depotCode = req.query.depotCode as string;
+		const result = await this.Service.findAll(depotCode);
+		return res.status(200).json({ count: result.length, result });
+	};
 
-const Service = container.resolve(TicketService);
+	FindByDate = async (req: Request, res: Response) => {
+		const depotCode = req.query.depotCode as string;
 
-router.get("/all", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const depotCode = req.query.depotCode as string;
-	const result = await Service.findAll(depotCode);
-	return res.status(200).json({ count: result.length, result });
-});
+		const date = req.query.date as string;
 
-router.get("/date", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const depotCode = req.query.depotCode as string;
+		const result = await this.Service.findByDate(depotCode, date);
 
-	const date = req.query.date as string;
+		return res.status(200).json({ count: result.length, result });
+	};
 
-	const result = await Service.findByDate(depotCode, date);
+	FindRevenueOfDay = async (req: Request, res: Response) => {
+		const depotCode = req.query.depotCode as string;
 
-	return res.status(200).json({ count: result.length, result });
-});
+		const startDate = req.query.startDate as string;
 
-router.get("/revenue/day", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const depotCode = req.query.depotCode as string;
+		const result = await this.Service.GetTicketRevenueofDay(depotCode, startDate);
 
-	const startDate = req.query.startDate as string;
+		return res.status(200).json({ result });
+	};
 
-	const result = await Service.GetTicketRevenueofDay(depotCode, startDate);
+	FindRevenueOfWeek = async (req: Request, res: Response) => {
+		const depotCode = req.query.depotCode as string;
 
-	return res.status(200).json({ result });
-});
+		const startDate = req.query.startDate as string;
 
-router.get("/revenue/week", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const depotCode = req.query.depotCode as string;
+		const result = await this.Service.GetTicketRevenueofWeek(depotCode, startDate);
 
-	const startDate = req.query.startDate as string;
+		return res.status(200).json({ result });
+	};
 
-	const result = await Service.GetTicketRevenueofWeek(depotCode, startDate);
+	FindRevenueofMonth = async (req: Request, res: Response) => {
+		const depotCode = req.query.depotCode as string;
 
-	return res.status(200).json({ result });
-});
+		const startDate = req.query.startDate as string;
 
-router.get("/revenue/month", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const depotCode = req.query.depotCode as string;
+		const result = await this.Service.GetTicketRevenueofMonth(depotCode, startDate);
 
-	const startDate = req.query.startDate as string;
+		return res.status(200).json({ result });
+	};
 
-	const result = await Service.GetTicketRevenueofMonth(depotCode, startDate);
+	FindBydId = async (req: Request, res: Response) => {
+		const id = req.params.id as string;
 
-	return res.status(200).json({ result });
-});
+		const result = await this.Service.findbyId(id);
 
-router.get("/:id", currentUser, requireAuth, async (req: Request, res: Response) => {
-	const id = req.params.id as string;
-
-	const result = await Service.findbyId(id);
-
-	return res.status(200).json({ result });
-});
-
-export { router as TicketRouter };
+		return res.status(200).json({ result });
+	};
+}
