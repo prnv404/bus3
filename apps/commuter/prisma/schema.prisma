@@ -1,0 +1,26 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Commuter {
+  id String  @id @default(uuid())
+  name String
+  phoneNumber String
+  type CommuterType
+  createdAt DateTime @default(now())
+  district String 
+  isVerified Boolean @default(false)
+  bussPassId String ?
+}
+
+enum CommuterType {
+  normal
+  student
+}

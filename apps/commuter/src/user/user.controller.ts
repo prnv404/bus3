@@ -17,8 +17,8 @@ import { Observable } from "rxjs";
 export class UserController implements CommuterServiceController {
 	constructor(private readonly userService: UserService) {}
 
-	create(createUserDto: CreateCommuterDto) {
-		return this.userService.create(createUserDto);
+	async create(createUserDto: CreateCommuterDto) {
+		return await this.userService.create(createUserDto);
 	}
 
 	findAll(request: Empty): Commuter | Promise<Commuter> | Observable<Commuter> {
