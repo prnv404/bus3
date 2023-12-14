@@ -11,17 +11,17 @@ const start = async () => {
 
 	await mqttService.subscribe("bus/pvt/+/ticket");
 
-	setInterval(async () => {
-		await mqttService.publish("bus/pvt/64be144ccbaa5636dc8b2824/ticket", {
-			busNo: "BUS10",
-			from: "ALAPPUZHA",
-			to: "AMBALAPPUZHA",
-			OperatorId: "64be144ccbaa5636dc8b2824",
-			price: 15,
-			route: "ALP-AMB",
-			srt: false
-		});
-	}, 5000);
+	// setInterval(async () => {
+	// 	await mqttService.publish("bus/pvt/64be144ccbaa5636dc8b2824/ticket", {
+	// 		busNo: "BUS10",
+	// 		from: "ALAPPUZHA",
+	// 		to: "AMBALAPPUZHA",
+	// 		OperatorId: "64be144ccbaa5636dc8b2824",
+	// 		price: 15,
+	// 		route: "ALP-AMB",
+	// 		srt: false
+	// 	});
+	// }, 5000);
 };
 
 start();
