@@ -44,6 +44,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
+    },
+    "operator": {
+      "type": "application",
+      "root": "apps/operator",
+      "entryFile": "main",
+      "sourceRoot": "apps/operator/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/operator/tsconfig.app.json"
+      }
     }
   }
 }

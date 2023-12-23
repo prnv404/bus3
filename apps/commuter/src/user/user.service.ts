@@ -1,5 +1,5 @@
 import { CreateCommuterDto, UpdateCommuterDto } from "@app/common";
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { DatabaseService } from "../database/database.service";
 import { Prisma } from "@prisma/client";
 
@@ -7,11 +7,23 @@ import { Prisma } from "@prisma/client";
 export class UserService {
 	constructor(private readonly database: DatabaseService) {}
 	async create(createUserDto: CreateCommuterDto) {
+		const phone = "9567296056";
+
+		const ifUserExist = await this.database.commuter.findFirst({
+			where: {
+				phoneNumber: phone
+			}
+		});
+
+		// if (ifUserExist) {
+		// 	throw new ForbiddenException("user already exist");
+		// }
+
 		const data: Prisma.CommuterCreateInput = {
 			name: createUserDto.name,
 			district: createUserDto.district,
 			type: "student",
-			phoneNumber: "9567296056"
+			phoneNumber: phone
 		};
 		const result = await this.database.commuter.create({
 			data
