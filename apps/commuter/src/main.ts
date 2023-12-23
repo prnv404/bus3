@@ -5,16 +5,14 @@ import { join } from "path";
 import { COMMUTER_PACKAGE_NAME } from "@app/common";
 
 async function bootstrap() {
-	const app = await NestFactory.create(CommuterModule);
-
-	app.connectMicroservice<MicroserviceOptions>({
+	const app = await NestFactory.createMicroservice<MicroserviceOptions>(CommuterModule, {
 		transport: Transport.GRPC,
 		options: {
 			protoPath: join(__dirname, "../commuter.proto"),
-			package: COMMUTER_PACKAGE_NAME
+			package: COMMUTER_PACKAGE_NAME,
+			url: "0.0.0.0:50000"
 		}
 	});
-	app.enableCors()
-	await app.listen(5000);
+	await app.listen();
 }
 bootstrap();
