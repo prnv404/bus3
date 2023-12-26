@@ -1,0 +1,37 @@
+syntax = "proto3";
+ 
+package commuter;
+
+service CommuterService {
+    rpc create(CreateCommuterDto) returns (Commuter){} 
+    rpc findAll(Empty) returns (Commuter){}
+    rpc findOne(FindOneCommuterDto) returns (Commuter){}
+    rpc update(UpdateCommuterDto) returns (Commuter){}
+    rpc remove(FindOneCommuterDto) returns (Commuter){}
+}
+
+message UpdateCommuterDto {
+    string id = 1;
+    string name = 2;
+    string district = 3;
+    string type = 4;
+    string isVerified = 5;
+}
+
+message FindOneCommuterDto {
+    string id = 1;
+}
+
+message Empty {}
+
+message CreateCommuterDto{
+    string name = 1;
+    string district =2;
+    string type  = 3;
+}
+
+message Commuter {
+    string name = 1;
+    string type = 2;
+    string district = 3;
+}
