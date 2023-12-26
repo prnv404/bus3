@@ -1,6 +1,0 @@
-apiVersion: apps.emqx.io/v2alpha1
-kind: EMQX
-metadata:  
-  name: bus3
-spec:
-  image: emqx/emqx:5.0.20
