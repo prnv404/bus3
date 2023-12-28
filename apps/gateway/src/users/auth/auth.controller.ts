@@ -20,5 +20,4 @@ export class AuthController {
 	verifyOtp(@Query("otp") otp: string) {
 		return this.authService.verifyOTP(otp);
 	}
-	
 }

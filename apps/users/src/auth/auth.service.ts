@@ -8,8 +8,6 @@ export class AuthService {
 	constructor(private readonly database: DatabaseService) {}
 
 	async createUser(userData: Prisma.UserCreateInput) {
-		
-		
 		const user = await this.database.user.create({ data: userData });
 		return user;
 	}
@@ -22,7 +20,7 @@ export class AuthService {
 		});
 	}
 
-	async verifyOtp(otp:string) {
-		return true
+	async verifyOtp(otp: string) {
+		return true;
 	}
 }

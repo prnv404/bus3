@@ -1,9 +1,17 @@
-import { User, createUserDto, findUserByIdDto, otpVerifyDto, responseStatus, UserAuthServiceController, UserAuthServiceControllerMethods } from "@app/common";
+import {
+	User,
+	createUserDto,
+	findUserByIdDto,
+	otpVerifyDto,
+	responseStatus,
+	UserAuthServiceController,
+	UserAuthServiceControllerMethods
+} from "@app/common";
 import { Controller } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 
 @Controller()
-@UserAuthServiceControllerMethods()	
+@UserAuthServiceControllerMethods()
 export class AuthController implements UserAuthServiceController {
 	constructor(private readonly authService: AuthService) {}
 

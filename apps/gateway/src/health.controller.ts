@@ -1,11 +1,11 @@
 import { Controller, Get } from "@nestjs/common";
 
-@Controller('health')
+@Controller("health")
 export class HealthController {
 	constructor() {}
 
 	@Get()
 	getHello(): string {
-		return 'I am okay :)'
+		return "I am okay :)";
 	}
 }
