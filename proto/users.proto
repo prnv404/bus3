@@ -1,0 +1,31 @@
+
+syntax="proto3";
+
+package users;
+
+service userService {
+
+    rpc createUser(createUserDto) returns(User){}
+    rpc findUserById(findUserByIdDto) returns(User){}
+
+}
+
+message User {
+    string id = 1;
+    string name =2;
+    string phone = 3;
+    string district = 4;
+    string accessToken= 5;
+    string refreshToken=6;
+}
+
+message createUserDto {
+    string name = 1;
+    string phone = 2;
+    string district = 3;
+}
+
+message findUserByIdDto {
+    string id = 1;
+}
+

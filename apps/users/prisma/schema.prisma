@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model commuter {
+  id String @default(uuid()) @id
+  name String 
+  phone String
+  district String
+  otp String?
+  accessToken String?
+  refreshToken String?
+  isVerified Boolean @default(false)
+  isStudent CommuterType
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+enum CommuterType {
+  student 
+  normal
+}
+
+
+
