@@ -3,10 +3,31 @@ syntax="proto3";
 
 package users;
 
+//--------------------- User Auth Service --------------------------------//
+
 service UserAuthService {
-    rpc createUser(createUserDto) returns(User){}
-    rpc findUserById(findUserByIdDto) returns(User){}
-    rpc verifyOTP(otpVerifyDto)returns(responseStatus){}
+    rpc createUser(createUserDto) returns(createUserResponse){}
+    rpc findUserById(findUserByIdDto) returns(findUserResponse){}
+    rpc verifyOTP(otpVerifyDto)returns(verifyOTPResponse){}
+}
+
+
+message createUserResponse {
+    int32 status = 1;
+    string message = 2;
+    User data = 3;
+}
+
+message findUserResponse {
+    int32 status = 1;
+    string message = 2;
+     User data = 3;
+}
+
+message verifyOTPResponse {
+    int32 status = 1;
+    string message = 2;
+    responseStatus data = 3;
 }
 
 message responseStatus {
@@ -39,3 +60,4 @@ message findUserByIdDto {
     string id = 1;
 }
 
+//----------------------------------------------------------------------------//
