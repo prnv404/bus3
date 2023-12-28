@@ -20,6 +20,5 @@ import { join } from "path";
 	],
 	controllers: [AuthController],
 	providers: [AuthService],
-	exports: []
 })
 export class AuthModule {}

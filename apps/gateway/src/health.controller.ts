@@ -1,7 +1,7 @@
 import { Controller, Get } from "@nestjs/common";
 
 @Controller('health')
-export class GatewayController {
+export class HealthController {
 	constructor() {}
 
 	@Get()
