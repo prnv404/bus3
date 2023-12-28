@@ -4,10 +4,17 @@ syntax="proto3";
 package users;
 
 service userService {
-
     rpc createUser(createUserDto) returns(User){}
     rpc findUserById(findUserByIdDto) returns(User){}
+    rpc verifyOTP(otpVerifyDto)returns(responseStatus){}
+}
 
+message responseStatus {
+    bool status = 1;
+}
+
+message otpVerifyDto {
+    string otp = 1;
 }
 
 message User {
