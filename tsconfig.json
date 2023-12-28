@@ -23,6 +23,12 @@
       ],
       "@app/common/*": [
         "libs/common/src/*"
+      ],
+      "@constants/constant": [
+        "libs/constant/src"
+      ],
+      "@constants/constant/*": [
+        "libs/constant/src/*"
       ]
     }
   }
