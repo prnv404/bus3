@@ -3,7 +3,7 @@ syntax="proto3";
 
 package users;
 
-service userService {
+service UserAuthService {
     rpc createUser(createUserDto) returns(User){}
     rpc findUserById(findUserByIdDto) returns(User){}
     rpc verifyOTP(otpVerifyDto)returns(responseStatus){}
@@ -24,12 +24,15 @@ message User {
     string district = 4;
     string accessToken= 5;
     string refreshToken=6;
+    string type = 7;
 }
 
 message createUserDto {
     string name = 1;
     string phone = 2;
     string district = 3;
+    string isStudent = 4;
+    string type = 5;
 }
 
 message findUserByIdDto {

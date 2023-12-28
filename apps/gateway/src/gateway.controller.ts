@@ -1,12 +1,11 @@
 import { Controller, Get } from "@nestjs/common";
-import { GatewayService } from "./gateway.service";
 
-@Controller()
+@Controller('health')
 export class GatewayController {
-	constructor(private readonly gatewayService: GatewayService) {}
+	constructor() {}
 
 	@Get()
 	getHello(): string {
-		return this.gatewayService.getHello();
+		return 'I am okay :)'
 	}
 }

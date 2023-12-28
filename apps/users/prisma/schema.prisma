@@ -9,7 +9,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model commuter {
+model User {
   id String @default(uuid()) @id
   name String 
   phone String
@@ -18,12 +18,12 @@ model commuter {
   accessToken String?
   refreshToken String?
   isVerified Boolean @default(false)
-  isStudent CommuterType
+  type UserType
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt
 }
 
-enum CommuterType {
+enum UserType {
   student 
   normal
 }
