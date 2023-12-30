@@ -12,10 +12,46 @@ service UserAuthService {
 }
 
 
+service BusPassService {
+    rpc createBusPass(bussPassDto) returns(bussPassResponse){}
+    rpc findBusPassById(findBusPassByIdDto)returns(bussPassResponse){}
+    rpc updateBusPass(updateBusPassDto)returns(bussPassResponse){}
+}
+
+message findBusPassByIdDto{
+    string id = 1;
+}
+
+
+
+message bussPassDto {
+   string id = 1;
+   string from =2 ;
+   string to = 3;
+   string user_id = 4;
+   int32 balance  = 5;
+   bool is_active = 6;
+}
+
+message updateBusPassDto {
+    string id  = 1;
+    string from =2 ;
+    string to = 3;
+    string user_id = 4;
+    int32 balance  = 5;
+    bool is_active = 6;
+}
+
+message bussPassResponse {
+    int32 status = 1;
+    string message = 2;
+    bussPassDto data = 3;
+}
+
 message createUserResponse {
     int32 status = 1;
     string message = 2;
-    User data = 3;
+    string accessToken = 3;
 }
 
 message findUserResponse {
@@ -27,15 +63,15 @@ message findUserResponse {
 message verifyOTPResponse {
     int32 status = 1;
     string message = 2;
-    responseStatus data = 3;
+    string accessToken = 3;
+    string refreshToken = 4;
 }
 
-message responseStatus {
-    bool status = 1;
-}
+
 
 message otpVerifyDto {
-    string otp = 1;
+    string userId = 1;
+    string otp = 2;
 }
 
 message User {
@@ -61,3 +97,5 @@ message findUserByIdDto {
 }
 
 //----------------------------------------------------------------------------//
+
+

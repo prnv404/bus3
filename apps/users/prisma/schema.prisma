@@ -12,7 +12,7 @@ datasource db {
 model User {
   id String @default(uuid()) @id
   name String 
-  phone String
+  phone String @unique
   district String
   otp String?
   accessToken String?
@@ -21,6 +21,17 @@ model User {
   type UserType
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt
+  bus_pass BusPass[]
+}
+
+model BusPass {
+  id String @default(uuid()) @id
+  from String 
+  to String
+  user User? @relation(fields: [userId],references: [id])
+  userId  String
+  balance Int
+  isActive Boolean @default(false)
 }
 
 enum UserType {

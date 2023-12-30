@@ -53,13 +53,13 @@
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
-    "constant": {
+    "config": {
       "type": "library",
-      "root": "libs/constant",
+      "root": "libs/config",
       "entryFile": "index",
-      "sourceRoot": "libs/constant/src",
+      "sourceRoot": "libs/config/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/constant/tsconfig.lib.json"
+        "tsConfigPath": "libs/config/tsconfig.lib.json"
       }
     }
   }

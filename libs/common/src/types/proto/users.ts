@@ -4,10 +4,38 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "users";
 
+export interface findBusPassByIdDto {
+  id: string;
+}
+
+export interface bussPassDto {
+  id: string;
+  from: string;
+  to: string;
+  userId: string;
+  balance: number;
+  isActive: boolean;
+}
+
+export interface updateBusPassDto {
+  id: string;
+  from: string;
+  to: string;
+  userId: string;
+  balance: number;
+  isActive: boolean;
+}
+
+export interface bussPassResponse {
+  status: number;
+  message: string;
+  data: bussPassDto | undefined;
+}
+
 export interface createUserResponse {
   status: number;
   message: string;
-  data: User | undefined;
+  accessToken: string;
 }
 
 export interface findUserResponse {
@@ -19,14 +47,12 @@ export interface findUserResponse {
 export interface verifyOTPResponse {
   status: number;
   message: string;
-  data: responseStatus | undefined;
-}
-
-export interface responseStatus {
-  status: boolean;
+  accessToken: string;
+  refreshToken: string;
 }
 
 export interface otpVerifyDto {
+  userId: string;
   otp: string;
 }
 
@@ -86,3 +112,38 @@ export function UserAuthServiceControllerMethods() {
 }
 
 export const USER_AUTH_SERVICE_NAME = "UserAuthService";
+
+export interface BusPassServiceClient {
+  createBusPass(request: bussPassDto): Observable<bussPassResponse>;
+
+  findBusPassById(request: findBusPassByIdDto): Observable<bussPassResponse>;
+
+  updateBusPass(request: updateBusPassDto): Observable<bussPassResponse>;
+}
+
+export interface BusPassServiceController {
+  createBusPass(request: bussPassDto): Promise<bussPassResponse> | Observable<bussPassResponse> | bussPassResponse;
+
+  findBusPassById(
+    request: findBusPassByIdDto,
+  ): Promise<bussPassResponse> | Observable<bussPassResponse> | bussPassResponse;
+
+  updateBusPass(request: updateBusPassDto): Promise<bussPassResponse> | Observable<bussPassResponse> | bussPassResponse;
+}
+
+export function BusPassServiceControllerMethods() {
+  return function (constructor: Function) {
+    const grpcMethods: string[] = ["createBusPass", "findBusPassById", "updateBusPass"];
+    for (const method of grpcMethods) {
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcMethod("BusPassService", method)(constructor.prototype[method], method, descriptor);
+    }
+    const grpcStreamMethods: string[] = [];
+    for (const method of grpcStreamMethods) {
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcStreamMethod("BusPassService", method)(constructor.prototype[method], method, descriptor);
+    }
+  };
+}
+
+export const BUS_PASS_SERVICE_NAME = "BusPassService";

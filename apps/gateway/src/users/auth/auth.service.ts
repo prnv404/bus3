@@ -20,7 +20,7 @@ export class AuthService implements OnModuleInit {
 		return this.userservice.findUserById({ id });
 	}
 
-	verifyOTP(otp: string) {
-		return this.userservice.verifyOtp({ otp });
+	verifyOTP(userId:string,otp: string) {
+		return this.userservice.verifyOtp({ userId,otp });
 	}
 }
